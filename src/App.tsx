@@ -17,8 +17,8 @@ function App() {
       <Route path="/information" element={<InformationPage />} />
       <Route path="/quiz" element={<QuizPage />} />
 
-      <Route path="/admin" element={<AdminPage />} />
-      <Route path="/admin/objects" element={<AdminObjectsPage />} />
+      <Route path="/adminobjects" element={<AdminObjectsPage />} />
+      <Route path="/admin/objects" element={<AdminPage/>} />
       <Route path="/admin/edit/:objectId" element={<EditObjectPage />} />
       <Route path="/object/:objectId" element={<ObjectPage />} />
     </Routes>
