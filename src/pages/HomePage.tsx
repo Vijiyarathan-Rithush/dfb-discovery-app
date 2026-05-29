@@ -13,10 +13,6 @@ function HomePage() {
           <button type="button" onClick={() => navigate('/quiz')}>
             Weiter zum Quiz
           </button>
-
-          <button type="button" onClick={() => navigate('/admin')}>
-            Admin öffnen
-          </button>
         </div>
       }
     >
