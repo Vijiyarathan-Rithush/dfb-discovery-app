@@ -1,26 +1,31 @@
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import PageLayout from '../components/layout/PageLayout'
+import LanguageSwitcher from '../components/LanguageSwitcher'
 
 function HomePage() {
-  return (
-    <main className="app-page">
-      <section className="card">
-        <p className="eyebrow">DFB-Entdecker-App</p>
-        <h1>Interaktive Erlebnisführung</h1>
-        <p>
-          Scanne einen QR-Code am Objekt und entdecke Informationen,
-          Hotspots und Quizfragen zur Furka-Bergstrecke.
-        </p>
+  const navigate = useNavigate()
 
+  return (
+    <PageLayout
+      headerRight={<LanguageSwitcher />}
+      footer={
         <div className="action-list">
-          <Link className="primary-link" to="/admin">
+          <button type="button" onClick={() => navigate('/quiz')}>
+            Weiter zum Quiz
+          </button>
+
+          <button type="button" onClick={() => navigate('/admin')}>
             Admin öffnen
-          </Link>
-          <Link className="secondary-link" to="/object/hg34">
-            Beispielobjekt ansehen
-          </Link>
+          </button>
         </div>
-      </section>
-    </main>
+      }
+    >
+      <h1>Dampflokomotive</h1>
+      <p>
+        Scanne einen QR-Code am Objekt und entdecke Informationen,
+        Hotspots und Quizfragen zur Furka-Bergstrecke.
+      </p>
+    </PageLayout>
   )
 }
 

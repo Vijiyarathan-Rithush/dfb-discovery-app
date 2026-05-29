@@ -1,0 +1,23 @@
+.switcher {
+  display: inline-flex;
+  gap: tokens.$space-2;
+}
+
+.option {
+  min-width: 44px;
+  padding: tokens.$space-2 tokens.$space-3;
+  border-radius: tokens.$radius-sm;
+  background: tokens.$color-primary-dark;
+  color: tokens.$color-brass-light;
+  font-size: tokens.$font-size-sm;
+  font-weight: tokens.$font-weight-bold;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+
+  &[aria-pressed='true'] {
+    background: tokens.$color-accent;
+    color: tokens.$color-primary-dark;
+  }
+
+  @include mixins.focus-ring;
+}

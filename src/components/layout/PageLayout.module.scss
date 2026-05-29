@@ -1,0 +1,27 @@
+.page {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  background: tokens.$color-background;
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: tokens.$space-5;
+}
+
+.footer {
+  position: sticky;
+  bottom: 0;
+  padding: tokens.$space-4 tokens.$space-5;
+  background: tokens.$color-background;
+  border-top: 1px solid tokens.$color-border;
+
+  // CTA-Buttons sollen die volle Breite des Footers einnehmen.
+  > button {
+    width: 100%;
+  }
+}
