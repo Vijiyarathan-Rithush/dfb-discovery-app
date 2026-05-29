@@ -163,7 +163,7 @@ function AdminObjectsPage() {
 
       <section className="object-list">
         {objects.map((object) => {
-          const objectUrl = `${window.location.origin}/object/${object.id}`
+          const objectUrl = `${window.location.origin}${import.meta.env.BASE_URL}#/object/${object.id}`
           const isSelected = selectedIds.includes(object.id)
           const shouldPrint =
             printIds.length === 0 || printIds.includes(object.id)
