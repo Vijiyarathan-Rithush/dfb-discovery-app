@@ -26,10 +26,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
 
       - name: Dependencies installieren
-        run: npm ci
+        run: npm install
 
       - name: Projekt bauen
         run: npm run build
