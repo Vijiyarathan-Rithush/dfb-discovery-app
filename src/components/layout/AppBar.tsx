@@ -1,19 +1,16 @@
 import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
+import house from '../../assets/house.svg'
 import styles from './AppBar.module.scss'
 
 interface AppBarProps {
-  /** Im Header zentriert angezeigter Titel. */
   title?: string
-  /** Zeigt links einen Zurück-Pfeil, der eine Seite zurück navigiert. */
   showBack?: boolean
-  /** Slot für Aktionen rechts im Header, z.B. den Sprachumschalter. */
-  right?: ReactNode
+  left?: ReactNode
 }
 
-/** Dunkler Espresso-Kopfbereich, der auf jeder Seite gleich aussieht. */
-function AppBar({ title, showBack, right }: AppBarProps) {
+function AppBar({ title, showBack, left }: AppBarProps) {
   const navigate = useNavigate()
 
   return (
@@ -29,11 +26,21 @@ function AppBar({ title, showBack, right }: AppBarProps) {
             <ArrowLeft size={24} aria-hidden="true" />
           </button>
         )}
+        {left}
       </div>
 
       {title && <h1 className={styles.title}>{title}</h1>}
 
-      <div className={`${styles.side} ${styles.right}`}>{right}</div>
+      <div className={`${styles.side} ${styles.right}`}>
+        <button
+          type="button"
+          className={styles.logo}
+          onClick={() => navigate('/')}
+          aria-label="Zur Startseite"
+        >
+          <img src={house} alt="" className={styles.logoImage} />
+        </button>
+      </div>
     </header>
   )
 }

@@ -7,7 +7,7 @@ function HomePage() {
 
   return (
     <PageLayout
-      headerRight={<LanguageSwitcher />}
+      headerLeft={<LanguageSwitcher />}
       footer={
         <div className="action-list">
           <button type="button" onClick={() => navigate('/quiz')}>
