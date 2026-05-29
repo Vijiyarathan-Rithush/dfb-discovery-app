@@ -9,6 +9,10 @@ const filePath = './backend/objects.json'
 app.use(cors())
 app.use(express.json())
 
+function writeObjects(objects) {
+  fs.writeFileSync(filePath, JSON.stringify(objects, null, 2))
+}
+
 function readObjects() {
   if (!fs.existsSync(filePath)) {
     writeObjects([])
@@ -25,9 +29,9 @@ function readObjects() {
   return JSON.parse(data)
 }
 
-function writeObjects(objects) {
-  fs.writeFileSync(filePath, JSON.stringify(objects, null, 2))
-}
+app.get('/', (req, res) => {
+  res.send('DFB Backend läuft. Nutze /api/objects für die Objektdaten.')
+})
 
 app.get('/api/objects', (req, res) => {
   res.json(readObjects())
@@ -60,6 +64,22 @@ app.post('/api/objects', (req, res) => {
   res.status(201).json({
     message: 'Objekt wurde gespeichert.',
     object: newObject,
+  })
+})
+
+app.delete('/api/objects/:id', (req, res) => {
+  const objects = readObjects()
+  const updatedObjects = objects.filter((item) => item.id !== req.params.id)
+
+  if (objects.length === updatedObjects.length) {
+    return res.status(404).json({ message: 'Objekt nicht gefunden.' })
+  }
+
+  writeObjects(updatedObjects)
+
+  res.json({
+    message: 'Objekt wurde gelöscht.',
+    id: req.params.id,
   })
 })
 

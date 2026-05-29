@@ -332,3 +332,18 @@
     border: 0;
   }
 }
+
+.danger-button {
+  width: 100%;
+  min-height: 52px;
+  border: 0;
+  border-radius: tokens.$radius-sm;
+  background: tokens.$color-error-bg;
+  color: tokens.$color-error-text;
+  font-weight: tokens.$font-weight-bold;
+  cursor: pointer;
+
+  &:hover {
+    background: #fecaca;
+  }
+}

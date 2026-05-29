@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { QRCodeSVG } from 'qrcode.react'
-import { getObjects } from '../api/ObjectApi'
+import { deleteObject, getObjects } from '../api/ObjectApi'
 import type { ObjectData } from '../types/ObjectData'
 
 function AdminObjectsPage() {
@@ -95,6 +95,28 @@ function AdminObjectsPage() {
     }, 100)
   }
 
+  async function handleDeleteObject(id: string) {
+    const shouldDelete = window.confirm('Soll dieses Objekt wirklich gelöscht werden?')
+
+    if (!shouldDelete) {
+      return
+    }
+
+    try {
+      await deleteObject(id)
+
+      setObjects((currentObjects) =>
+        currentObjects.filter((object) => object.id !== id),
+      )
+
+      setSelectedIds((currentIds) =>
+        currentIds.filter((currentId) => currentId !== id),
+      )
+    } catch {
+      setError('Objekt konnte nicht gelöscht werden.')
+    }
+  }
+
   return (
     <main className="app-page admin-page">
       <section className="card no-print">
@@ -177,12 +199,24 @@ function AdminObjectsPage() {
                   Objekt ansehen
                 </Link>
 
+                <Link className="secondary-link" to={`/admin/edit/${object.id}`}>
+                  Bearbeiten
+                </Link>
+
                 <button
                   className="primary-button"
                   type="button"
                   onClick={() => printSingleObject(object.id)}
                 >
                   QR-Code drucken
+                </button>
+
+                <button
+                  className="danger-button"
+                  type="button"
+                  onClick={() => handleDeleteObject(object.id)}
+                >
+                  Löschen
                 </button>
               </div>
             </article>

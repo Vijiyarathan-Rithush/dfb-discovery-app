@@ -56,12 +56,7 @@ function AdminPage() {
             <label htmlFor="id">
               Objekt-ID <span className="required-star">*</span>
             </label>
-            <input
-              id="id"
-              name="id"
-              required
-              placeholder="z.B. hg34"
-            />
+            <input id="id" name="id" required placeholder="z.B. hg34" />
           </div>
 
           <div className="form-field">
@@ -92,52 +87,27 @@ function AdminPage() {
             <label htmlFor="shortDe">
               Kurzbeschreibung Deutsch <span className="required-star">*</span>
             </label>
-            <textarea
-              id="shortDe"
-              name="shortDe"
-              required
-            />
+            <textarea id="shortDe" name="shortDe" required />
           </div>
 
           <div className="form-field form-field--full">
-            <label htmlFor="shortFr">
-              Kurzbeschreibung Französisch
-            </label>
-            <textarea
-              id="shortFr"
-              name="shortFr"
-            />
+            <label htmlFor="shortFr">Kurzbeschreibung Französisch</label>
+            <textarea id="shortFr" name="shortFr" />
           </div>
 
           <div className="form-field form-field--full">
-            <label htmlFor="technicalDe">
-              Technische Beschreibung Deutsch
-            </label>
-            <textarea
-              id="technicalDe"
-              name="technicalDe"
-            />
+            <label htmlFor="technicalDe">Technische Beschreibung Deutsch</label>
+            <textarea id="technicalDe" name="technicalDe" />
           </div>
 
           <div className="form-field form-field--full">
-            <label htmlFor="technicalFr">
-              Technische Beschreibung Französisch
-            </label>
-            <textarea
-              id="technicalFr"
-              name="technicalFr"
-            />
+            <label htmlFor="technicalFr">Technische Beschreibung Französisch</label>
+            <textarea id="technicalFr" name="technicalFr" />
           </div>
 
           <div className="form-field form-field--full">
-            <label htmlFor="imageUrl">
-              Bild-URL
-            </label>
-            <input
-              id="imageUrl"
-              name="imageUrl"
-              placeholder="/images/lok.jpg"
-            />
+            <label htmlFor="imageUrl">Bild-URL</label>
+            <input id="imageUrl" name="imageUrl" placeholder="/images/lok.jpg" />
           </div>
 
           <button className="primary-button" type="submit">
