@@ -115,7 +115,7 @@ function AdminPage() {
         {error && <p className="error-message">{error}</p>}
 
         <div className="action-list">
-          <Link className="secondary-link" to="/admin/objects">
+          <Link className="secondary-link" to="/admin">
             Objektübersicht öffnen
           </Link>
 

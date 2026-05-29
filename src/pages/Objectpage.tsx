@@ -82,8 +82,8 @@ function ObjectPage() {
           </div>
         )}
 
-        <Link className="secondary-link" to="/admin/objects">
-          Zurück zur Übersicht
+        <Link className="secondary-link" to="/">
+          Zurück zur Startseite
         </Link>
       </section>
     </main>

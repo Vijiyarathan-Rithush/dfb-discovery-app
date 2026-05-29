@@ -128,7 +128,7 @@ function AdminObjectsPage() {
         </p>
 
         <div className="action-list">
-          <Link className="primary-link" to="/admin">
+         <Link className="primary-link" to="/admin/create">
             Neues Objekt erfassen
           </Link>
 

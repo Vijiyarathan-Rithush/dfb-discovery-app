@@ -73,7 +73,7 @@ function EditObjectPage() {
           <h1>Objekt bearbeiten</h1>
           <p className="error-message">{error}</p>
 
-          <Link className="secondary-link" to="/admin/objects">
+          <Link className="secondary-link" to="/admin">
             Zurück zur Übersicht
           </Link>
         </section>
