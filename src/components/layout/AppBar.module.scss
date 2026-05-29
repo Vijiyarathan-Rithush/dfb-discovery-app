@@ -1,0 +1,51 @@
+.appBar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 48px 1fr 48px;
+  align-items: center;
+  gap: tokens.$space-2;
+  min-height: 64px;
+  padding: tokens.$space-3 tokens.$space-4;
+  background: tokens.$color-primary-dark;
+  color: tokens.$color-cream-text;
+}
+
+.title {
+  grid-column: 2;
+  margin: 0;
+  text-align: center;
+  font-size: tokens.$font-size-xl;
+  font-weight: tokens.$font-weight-regular;
+  color: tokens.$color-cream-text;
+}
+
+.side {
+  display: flex;
+  align-items: center;
+
+  &.right {
+    justify-content: flex-end;
+  }
+}
+
+// Der globale button-base-Stil wird hier zurückgesetzt: nur Icon, kein Hintergrund.
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: tokens.$radius-pill;
+  background: transparent;
+  color: tokens.$color-cream-text;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  @include mixins.focus-ring;
+}
