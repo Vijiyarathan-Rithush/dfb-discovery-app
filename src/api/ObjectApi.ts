@@ -2,13 +2,10 @@ import type { ObjectData } from '../types/ObjectData'
 
 const API_URL = 'https://backend-dfb.onrender.com/api/objects'
 
-export async function saveObject(object: ObjectData) {
+export async function saveObject(formData: FormData) {
   const response = await fetch(API_URL, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(object),
+    body: formData,
   })
 
   if (!response.ok) {

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import type { FormEventHandler } from 'react'
 import { Link } from 'react-router-dom'
 import { saveObject } from '../api/ObjectApi'
-import type { ObjectData } from '../types/ObjectData'
 
 function AdminPage() {
   const [message, setMessage] = useState('')
@@ -16,20 +15,12 @@ function AdminPage() {
     const form = event.currentTarget
     const formData = new FormData(form)
     const rawId = String(formData.get('id')).trim()
+    const safeId = rawId.toLowerCase().replace(/\s+/g, '-')
 
-    const object: ObjectData = {
-      id: rawId.toLowerCase().replace(/\s+/g, '-'),
-      titleDe: String(formData.get('titleDe')).trim(),
-      titleFr: String(formData.get('titleFr')).trim(),
-      shortDe: String(formData.get('shortDe')).trim(),
-      shortFr: String(formData.get('shortFr')).trim(),
-      technicalDe: String(formData.get('technicalDe')).trim(),
-      technicalFr: String(formData.get('technicalFr')).trim(),
-      imageUrl: String(formData.get('imageUrl')).trim(),
-    }
+    formData.set('id', safeId)
 
     try {
-      await saveObject(object)
+      await saveObject(formData)
       setMessage('Objekt wurde gespeichert.')
       form.reset()
     } catch {
@@ -43,8 +34,8 @@ function AdminPage() {
         <p className="eyebrow">Admin</p>
         <h1>Objekt erfassen</h1>
         <p>
-          Admins können hier ein Objekt erfassen. Die Daten werden über
-          eine API im Backend gespeichert.
+          Admins können hier ein Objekt erfassen. Die Daten und das Bild
+          werden über eine API im Backend gespeichert.
         </p>
 
         <p className="form-hint">
@@ -106,8 +97,13 @@ function AdminPage() {
           </div>
 
           <div className="form-field form-field--full">
-            <label htmlFor="imageUrl">Bild-URL</label>
-            <input id="imageUrl" name="imageUrl" placeholder="/images/lok.jpg" />
+            <label htmlFor="image">Bild hochladen</label>
+            <input
+              id="image"
+              name="image"
+              type="file"
+              accept="image/*"
+            />
           </div>
 
           <button className="primary-button" type="submit">

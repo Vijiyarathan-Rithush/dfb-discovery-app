@@ -347,3 +347,10 @@
     background: #fecaca;
   }
 }
+
+.object-image-preview {
+  width: 100%;
+  max-width: 360px;
+  border-radius: tokens.$radius-sm;
+  border: 1px solid tokens.$color-border;
+}

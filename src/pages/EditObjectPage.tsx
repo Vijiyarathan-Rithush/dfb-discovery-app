@@ -35,22 +35,22 @@ function EditObjectPage() {
     setError('')
     setMessage('')
 
+    if (!object) {
+      setError('Objekt konnte nicht aktualisiert werden.')
+      return
+    }
+
     const form = event.currentTarget
     const formData = new FormData(form)
+    const selectedImage = formData.get('image')
 
-    const updatedObject: ObjectData = {
-      id: String(formData.get('id')).trim(),
-      titleDe: String(formData.get('titleDe')).trim(),
-      titleFr: String(formData.get('titleFr')).trim(),
-      shortDe: String(formData.get('shortDe')).trim(),
-      shortFr: String(formData.get('shortFr')).trim(),
-      technicalDe: String(formData.get('technicalDe')).trim(),
-      technicalFr: String(formData.get('technicalFr')).trim(),
-      imageUrl: String(formData.get('imageUrl')).trim(),
+    if (!(selectedImage instanceof File) || selectedImage.size === 0) {
+      formData.delete('image')
+      formData.set('imageUrl', object.imageUrl)
     }
 
     try {
-      await saveObject(updatedObject)
+      await saveObject(formData)
       setMessage('Objekt wurde aktualisiert.')
 
       setTimeout(() => {
@@ -171,13 +171,25 @@ function EditObjectPage() {
           </div>
 
           <div className="form-field form-field--full">
-            <label htmlFor="imageUrl">Bild-URL</label>
+            <label htmlFor="image">Neues Bild hochladen</label>
             <input
-              id="imageUrl"
-              name="imageUrl"
-              defaultValue={object.imageUrl}
+              id="image"
+              name="image"
+              type="file"
+              accept="image/*"
             />
           </div>
+
+          {object.imageUrl && (
+            <div className="form-field form-field--full">
+              <p className="form-hint">Aktuelles Bild:</p>
+              <img
+                className="object-image-preview"
+                src={object.imageUrl}
+                alt={object.titleDe}
+              />
+            </div>
+          )}
 
           <button className="primary-button" type="submit">
             Änderungen speichern

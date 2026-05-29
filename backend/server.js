@@ -1,13 +1,32 @@
 import express from 'express'
 import cors from 'cors'
 import fs from 'fs'
+import multer from 'multer'
 
 const app = express()
 const port = process.env.PORT || 3001
 const filePath = './backend/objects.json'
+const uploadDir = './backend/uploads'
+
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true })
+}
+
+const storage = multer.diskStorage({
+  destination: uploadDir,
+  filename: (req, file, callback) => {
+    const cleanName = file.originalname.replace(/\s+/g, '-').toLowerCase()
+    const fileName = `${Date.now()}-${cleanName}`
+
+    callback(null, fileName)
+  },
+})
+
+const upload = multer({ storage })
 
 app.use(cors())
 app.use(express.json())
+app.use('/uploads', express.static(uploadDir))
 
 function writeObjects(objects) {
   fs.writeFileSync(filePath, JSON.stringify(objects, null, 2))
@@ -48,8 +67,21 @@ app.get('/api/objects/:id', (req, res) => {
   res.json(object)
 })
 
-app.post('/api/objects', (req, res) => {
-  const newObject = req.body
+app.post('/api/objects', upload.single('image'), (req, res) => {
+  const imageUrl = req.file
+    ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`
+    : req.body.imageUrl || ''
+
+  const newObject = {
+    id: req.body.id,
+    titleDe: req.body.titleDe,
+    titleFr: req.body.titleFr,
+    shortDe: req.body.shortDe,
+    shortFr: req.body.shortFr || '',
+    technicalDe: req.body.technicalDe || '',
+    technicalFr: req.body.technicalFr || '',
+    imageUrl,
+  }
 
   if (!newObject.id || !newObject.titleDe || !newObject.titleFr || !newObject.shortDe) {
     return res.status(400).json({ message: 'Pflichtfelder fehlen.' })

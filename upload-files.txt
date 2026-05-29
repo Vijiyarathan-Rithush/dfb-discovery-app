@@ -1,0 +1,1037 @@
+ 
+============================================================ 
+DATEI: backend\server.js 
+============================================================ 
+ 
+import express from 'express'
+import cors from 'cors'
+import fs from 'fs'
+import multer from 'multer'
+
+const app = express()
+const port = process.env.PORT || 3001
+const filePath = './backend/objects.json'
+const uploadDir = './backend/uploads'
+
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true })
+}
+
+const storage = multer.diskStorage({
+  destination: uploadDir,
+  filename: (req, file, callback) => {
+    const cleanName = file.originalname.replace(/\s+/g, '-').toLowerCase()
+    const fileName = `${Date.now()}-${cleanName}`
+
+    callback(null, fileName)
+  },
+})
+
+const upload = multer({ storage })
+
+app.use(cors())
+app.use(express.json())
+app.use('/uploads', express.static(uploadDir))
+
+function writeObjects(objects) {
+  fs.writeFileSync(filePath, JSON.stringify(objects, null, 2))
+}
+
+function readObjects() {
+  if (!fs.existsSync(filePath)) {
+    writeObjects([])
+    return []
+  }
+
+  const data = fs.readFileSync(filePath, 'utf8').trim()
+
+  if (!data) {
+    writeObjects([])
+    return []
+  }
+
+  return JSON.parse(data)
+}
+
+app.get('/', (req, res) => {
+  res.send('DFB Backend läuft. Nutze /api/objects für die Objektdaten.')
+})
+
+app.get('/api/objects', (req, res) => {
+  res.json(readObjects())
+})
+
+app.get('/api/objects/:id', (req, res) => {
+  const objects = readObjects()
+  const object = objects.find((item) => item.id === req.params.id)
+
+  if (!object) {
+    return res.status(404).json({ message: 'Objekt nicht gefunden.' })
+  }
+
+  res.json(object)
+})
+
+app.post('/api/objects', upload.single('image'), (req, res) => {
+  const imageUrl = req.file
+    ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`
+    : req.body.imageUrl || ''
+
+  const newObject = {
+    id: req.body.id,
+    titleDe: req.body.titleDe,
+    titleFr: req.body.titleFr,
+    shortDe: req.body.shortDe,
+    shortFr: req.body.shortFr || '',
+    technicalDe: req.body.technicalDe || '',
+    technicalFr: req.body.technicalFr || '',
+    imageUrl,
+  }
+
+  if (!newObject.id || !newObject.titleDe || !newObject.titleFr || !newObject.shortDe) {
+    return res.status(400).json({ message: 'Pflichtfelder fehlen.' })
+  }
+
+  const objects = readObjects()
+  const updatedObjects = objects.filter((item) => item.id !== newObject.id)
+
+  updatedObjects.push(newObject)
+  writeObjects(updatedObjects)
+
+  res.status(201).json({
+    message: 'Objekt wurde gespeichert.',
+    object: newObject,
+  })
+})
+
+app.delete('/api/objects/:id', (req, res) => {
+  const objects = readObjects()
+  const updatedObjects = objects.filter((item) => item.id !== req.params.id)
+
+  if (objects.length === updatedObjects.length) {
+    return res.status(404).json({ message: 'Objekt nicht gefunden.' })
+  }
+
+  writeObjects(updatedObjects)
+
+  res.json({
+    message: 'Objekt wurde gelöscht.',
+    id: req.params.id,
+  })
+})
+
+app.listen(port, () => {
+  console.log(`Backend läuft auf http://localhost:${port}`)
+}) 
+ 
+============================================================ 
+DATEI: src\api\ObjectApi.ts 
+============================================================ 
+ 
+import type { ObjectData } from '../types/ObjectData'
+
+const API_URL = 'https://backend-dfb.onrender.com/api/objects'
+
+export async function saveObject(object: ObjectData) {
+  const response = await fetch(API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(object),
+  })
+
+  if (!response.ok) {
+    throw new Error('Objekt konnte nicht gespeichert werden.')
+  }
+
+  return response.json()
+}
+
+export async function getObjects(): Promise<ObjectData[]> {
+  const response = await fetch(API_URL)
+
+  if (!response.ok) {
+    throw new Error('Objekte konnten nicht geladen werden.')
+  }
+
+  return response.json()
+}
+
+export async function getObjectById(id: string): Promise<ObjectData> {
+  const response = await fetch(`${API_URL}/${id}`)
+
+  if (!response.ok) {
+    throw new Error('Objekt konnte nicht geladen werden.')
+  }
+
+  return response.json()
+}
+
+export async function deleteObject(id: string) {
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: 'DELETE',
+  })
+
+  if (!response.ok) {
+    throw new Error('Objekt konnte nicht gelöscht werden.')
+  }
+
+  return response.json()
+} 
+ 
+============================================================ 
+DATEI: src\pages\AdminPage.tsx 
+============================================================ 
+ 
+import { useState } from 'react'
+import type { FormEventHandler } from 'react'
+import { Link } from 'react-router-dom'
+import { saveObject } from '../api/ObjectApi'
+import type { ObjectData } from '../types/ObjectData'
+
+function AdminPage() {
+  const [message, setMessage] = useState('')
+  const [error, setError] = useState('')
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+    event.preventDefault()
+    setMessage('')
+    setError('')
+
+    const form = event.currentTarget
+    const formData = new FormData(form)
+    const rawId = String(formData.get('id')).trim()
+
+    const object: ObjectData = {
+      id: rawId.toLowerCase().replace(/\s+/g, '-'),
+      titleDe: String(formData.get('titleDe')).trim(),
+      titleFr: String(formData.get('titleFr')).trim(),
+      shortDe: String(formData.get('shortDe')).trim(),
+      shortFr: String(formData.get('shortFr')).trim(),
+      technicalDe: String(formData.get('technicalDe')).trim(),
+      technicalFr: String(formData.get('technicalFr')).trim(),
+      imageUrl: String(formData.get('imageUrl')).trim(),
+    }
+
+    try {
+      await saveObject(object)
+      setMessage('Objekt wurde gespeichert.')
+      form.reset()
+    } catch {
+      setError('Objekt konnte nicht gespeichert werden.')
+    }
+  }
+
+  return (
+    <main className="app-page admin-page">
+      <section className="card">
+        <p className="eyebrow">Admin</p>
+        <h1>Objekt erfassen</h1>
+        <p>
+          Admins können hier ein Objekt erfassen. Die Daten werden über
+          eine API im Backend gespeichert.
+        </p>
+
+        <p className="form-hint">
+          Felder mit <span className="required-star">*</span> sind Pflichtfelder.
+        </p>
+
+        <form className="admin-form" onSubmit={handleSubmit}>
+          <div className="form-field">
+            <label htmlFor="id">
+              Objekt-ID <span className="required-star">*</span>
+            </label>
+            <input id="id" name="id" required placeholder="z.B. hg34" />
+          </div>
+
+          <div className="form-field">
+            <label htmlFor="titleDe">
+              Titel Deutsch <span className="required-star">*</span>
+            </label>
+            <input
+              id="titleDe"
+              name="titleDe"
+              required
+              placeholder="Dampflokomotive HG 3/4"
+            />
+          </div>
+
+          <div className="form-field">
+            <label htmlFor="titleFr">
+              Titel Französisch <span className="required-star">*</span>
+            </label>
+            <input
+              id="titleFr"
+              name="titleFr"
+              required
+              placeholder="Locomotive à vapeur HG 3/4"
+            />
+          </div>
+
+          <div className="form-field form-field--full">
+            <label htmlFor="shortDe">
+              Kurzbeschreibung Deutsch <span className="required-star">*</span>
+            </label>
+            <textarea id="shortDe" name="shortDe" required />
+          </div>
+
+          <div className="form-field form-field--full">
+            <label htmlFor="shortFr">Kurzbeschreibung Französisch</label>
+            <textarea id="shortFr" name="shortFr" />
+          </div>
+
+          <div className="form-field form-field--full">
+            <label htmlFor="technicalDe">Technische Beschreibung Deutsch</label>
+            <textarea id="technicalDe" name="technicalDe" />
+          </div>
+
+          <div className="form-field form-field--full">
+            <label htmlFor="technicalFr">Technische Beschreibung Französisch</label>
+            <textarea id="technicalFr" name="technicalFr" />
+          </div>
+
+          <div className="form-field form-field--full">
+            <label htmlFor="imageUrl">Bild-URL</label>
+            <input id="imageUrl" name="imageUrl" placeholder="/images/lok.jpg" />
+          </div>
+
+          <button className="primary-button" type="submit">
+            Objekt speichern
+          </button>
+        </form>
+
+        {message && <p className="success-message">{message}</p>}
+        {error && <p className="error-message">{error}</p>}
+
+        <div className="action-list">
+          <Link className="secondary-link" to="/admin/objects">
+            Objektübersicht öffnen
+          </Link>
+
+          <Link className="secondary-link" to="/">
+            Zurück
+          </Link>
+        </div>
+      </section>
+    </main>
+  )
+}
+
+export default AdminPage 
+ 
+============================================================ 
+DATEI: src\pages\EditObjectPage.tsx 
+============================================================ 
+ 
+import { useEffect, useState } from 'react'
+import type { FormEventHandler } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { getObjectById, saveObject } from '../api/ObjectApi'
+import type { ObjectData } from '../types/ObjectData'
+
+function EditObjectPage() {
+  const { objectId } = useParams()
+  const navigate = useNavigate()
+
+  const [object, setObject] = useState<ObjectData | null>(null)
+  const [error, setError] = useState('')
+  const [message, setMessage] = useState('')
+
+  useEffect(() => {
+    async function loadObject() {
+      if (!objectId) {
+        setError('Keine Objekt-ID vorhanden.')
+        return
+      }
+
+      try {
+        const loadedObject = await getObjectById(objectId)
+        setObject(loadedObject)
+      } catch {
+        setError('Objekt konnte nicht geladen werden.')
+      }
+    }
+
+    loadObject()
+  }, [objectId])
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+    event.preventDefault()
+    setError('')
+    setMessage('')
+
+    const form = event.currentTarget
+    const formData = new FormData(form)
+
+    const updatedObject: ObjectData = {
+      id: String(formData.get('id')).trim(),
+      titleDe: String(formData.get('titleDe')).trim(),
+      titleFr: String(formData.get('titleFr')).trim(),
+      shortDe: String(formData.get('shortDe')).trim(),
+      shortFr: String(formData.get('shortFr')).trim(),
+      technicalDe: String(formData.get('technicalDe')).trim(),
+      technicalFr: String(formData.get('technicalFr')).trim(),
+      imageUrl: String(formData.get('imageUrl')).trim(),
+    }
+
+    try {
+      await saveObject(updatedObject)
+      setMessage('Objekt wurde aktualisiert.')
+
+      setTimeout(() => {
+        navigate('/admin/objects')
+      }, 500)
+    } catch {
+      setError('Objekt konnte nicht aktualisiert werden.')
+    }
+  }
+
+  if (error && !object) {
+    return (
+      <main className="app-page admin-page">
+        <section className="card">
+          <p className="eyebrow">Admin</p>
+          <h1>Objekt bearbeiten</h1>
+          <p className="error-message">{error}</p>
+
+          <Link className="secondary-link" to="/admin/objects">
+            Zurück zur Übersicht
+          </Link>
+        </section>
+      </main>
+    )
+  }
+
+  if (!object) {
+    return (
+      <main className="app-page admin-page">
+        <section className="card">
+          <p>Objekt wird geladen...</p>
+        </section>
+      </main>
+    )
+  }
+
+  return (
+    <main className="app-page admin-page">
+      <section className="card">
+        <p className="eyebrow">Admin</p>
+        <h1>Objekt bearbeiten</h1>
+
+        <form className="admin-form" onSubmit={handleSubmit}>
+          <div className="form-field">
+            <label htmlFor="id">
+              Objekt-ID <span className="required-star">*</span>
+            </label>
+            <input
+              id="id"
+              name="id"
+              required
+              readOnly
+              defaultValue={object.id}
+            />
+          </div>
+
+          <div className="form-field">
+            <label htmlFor="titleDe">
+              Titel Deutsch <span className="required-star">*</span>
+            </label>
+            <input
+              id="titleDe"
+              name="titleDe"
+              required
+              defaultValue={object.titleDe}
+            />
+          </div>
+
+          <div className="form-field">
+            <label htmlFor="titleFr">
+              Titel Französisch <span className="required-star">*</span>
+            </label>
+            <input
+              id="titleFr"
+              name="titleFr"
+              required
+              defaultValue={object.titleFr}
+            />
+          </div>
+
+          <div className="form-field form-field--full">
+            <label htmlFor="shortDe">
+              Kurzbeschreibung Deutsch <span className="required-star">*</span>
+            </label>
+            <textarea
+              id="shortDe"
+              name="shortDe"
+              required
+              defaultValue={object.shortDe}
+            />
+          </div>
+
+          <div className="form-field form-field--full">
+            <label htmlFor="shortFr">Kurzbeschreibung Französisch</label>
+            <textarea
+              id="shortFr"
+              name="shortFr"
+              defaultValue={object.shortFr}
+            />
+          </div>
+
+          <div className="form-field form-field--full">
+            <label htmlFor="technicalDe">Technische Beschreibung Deutsch</label>
+            <textarea
+              id="technicalDe"
+              name="technicalDe"
+              defaultValue={object.technicalDe}
+            />
+          </div>
+
+          <div className="form-field form-field--full">
+            <label htmlFor="technicalFr">Technische Beschreibung Französisch</label>
+            <textarea
+              id="technicalFr"
+              name="technicalFr"
+              defaultValue={object.technicalFr}
+            />
+          </div>
+
+          <div className="form-field form-field--full">
+            <label htmlFor="imageUrl">Bild-URL</label>
+            <input
+              id="imageUrl"
+              name="imageUrl"
+              defaultValue={object.imageUrl}
+            />
+          </div>
+
+          <button className="primary-button" type="submit">
+            Änderungen speichern
+          </button>
+        </form>
+
+        {message && <p className="success-message">{message}</p>}
+        {error && <p className="error-message">{error}</p>}
+
+        <Link className="secondary-link" to="/admin/objects">
+          Zurück zur Übersicht
+        </Link>
+      </section>
+    </main>
+  )
+}
+
+export default EditObjectPage 
+ 
+============================================================ 
+DATEI: src\pages\ObjectPage.tsx 
+============================================================ 
+ 
+import { useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import { getObjectById } from '../api/ObjectApi'
+import type { ObjectData } from '../types/ObjectData'
+
+function ObjectPage() {
+  const { objectId } = useParams()
+  const [object, setObject] = useState<ObjectData | null>(null)
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    async function loadObject() {
+      if (!objectId) {
+        setError('Keine Objekt-ID vorhanden.')
+        setIsLoading(false)
+        return
+      }
+
+      try {
+        const loadedObject = await getObjectById(objectId)
+        setObject(loadedObject)
+      } catch {
+        setError('Objekt konnte nicht geladen werden.')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadObject()
+  }, [objectId])
+
+  if (isLoading) {
+    return (
+      <main className="app-page">
+        <section className="card">
+          <p>Objekt wird geladen...</p>
+        </section>
+      </main>
+    )
+  }
+
+  if (error || !object) {
+    return (
+      <main className="app-page">
+        <section className="card">
+          <p className="eyebrow">Fehler</p>
+          <h1>Objekt nicht gefunden</h1>
+          <p>{error}</p>
+
+          <Link className="secondary-link" to="/admin/objects">
+            Zurück zur Übersicht
+          </Link>
+        </section>
+      </main>
+    )
+  }
+
+  return (
+    <main className="app-page">
+      <section className="card">
+        <p className="eyebrow">Objekt-ID: {object.id}</p>
+        <h1>{object.titleDe}</h1>
+
+        {object.imageUrl && (
+          <img
+            className="object-image"
+            src={object.imageUrl}
+            alt={object.titleDe}
+          />
+        )}
+
+        <div className="info-block">
+          <h2>Kurzbeschreibung</h2>
+          <p>{object.shortDe}</p>
+        </div>
+
+        {object.technicalDe && (
+          <div className="info-block">
+            <h2>Technische Beschreibung</h2>
+            <p>{object.technicalDe}</p>
+          </div>
+        )}
+
+        <Link className="secondary-link" to="/admin/objects">
+          Zurück zur Übersicht
+        </Link>
+      </section>
+    </main>
+  )
+}
+
+export default ObjectPage 
+ 
+============================================================ 
+DATEI: src\types\ObjectData.ts 
+============================================================ 
+ 
+export type ObjectData = {
+  id: string
+  titleDe: string
+  titleFr: string
+  shortDe: string
+  shortFr: string
+  technicalDe: string
+  technicalFr: string
+  imageUrl: string
+} 
+ 
+============================================================ 
+DATEI: src\styles\_layout.scss 
+============================================================ 
+ 
+@use 'tokens';
+
+.app-page {
+  min-height: 100svh;
+  padding: tokens.$space-6 tokens.$space-5;
+  background: tokens.$color-background;
+}
+
+.admin-page {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+.card {
+  background: tokens.$color-card;
+  border: 1px solid tokens.$color-border;
+  border-radius: tokens.$radius;
+  padding: tokens.$space-6;
+  box-shadow: tokens.$shadow-card;
+}
+
+.eyebrow {
+  margin-bottom: tokens.$space-3;
+  color: tokens.$color-text-muted;
+  font-size: tokens.$font-size-sm;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.card h1 {
+  margin-bottom: tokens.$space-4;
+}
+
+.card p {
+  margin-bottom: tokens.$space-5;
+}
+
+.action-list {
+  display: grid;
+  gap: tokens.$space-3;
+  margin-top: tokens.$space-6;
+}
+
+.primary-link,
+.secondary-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  border-radius: tokens.$radius-sm;
+  padding: tokens.$space-3 tokens.$space-5;
+  text-decoration: none;
+  font-size: tokens.$font-size-lg;
+}
+
+.primary-link {
+  background: tokens.$color-accent;
+  color: tokens.$color-text;
+
+  &:hover {
+    background: tokens.$color-accent-hover;
+    color: tokens.$color-text;
+    text-decoration: none;
+  }
+}
+
+.secondary-link {
+  border: 1px solid tokens.$color-border;
+  background: tokens.$color-card;
+  color: tokens.$color-text;
+
+  &:hover {
+    border-color: tokens.$color-accent;
+    color: tokens.$color-text;
+    text-decoration: none;
+  }
+}
+
+/* Admin Formular */
+
+.admin-form {
+  display: grid;
+  gap: tokens.$space-4;
+  margin-top: tokens.$space-6;
+  margin-bottom: tokens.$space-6;
+}
+
+.form-field {
+  display: grid;
+  gap: tokens.$space-2;
+}
+
+.form-field label {
+  color: tokens.$color-primary-dark;
+  font-weight: tokens.$font-weight-bold;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  border: 1px solid tokens.$color-border;
+  border-radius: tokens.$radius-sm;
+  padding: tokens.$space-3;
+  background: tokens.$color-card;
+  color: tokens.$color-text;
+}
+
+.form-field input {
+  min-height: 52px;
+}
+
+.form-field textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.form-hint {
+  color: tokens.$color-text-muted;
+  font-size: tokens.$font-size-sm;
+}
+
+.required-star {
+  color: tokens.$color-error-text;
+  font-weight: tokens.$font-weight-bold;
+}
+
+.primary-button {
+  width: 100%;
+  min-height: 52px;
+  background: tokens.$color-accent;
+  color: tokens.$color-text;
+  font-weight: tokens.$font-weight-bold;
+
+  &:hover {
+    background: tokens.$color-accent-hover;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+.success-message,
+.error-message,
+.empty-message {
+  border-radius: tokens.$radius-sm;
+  padding: tokens.$space-3;
+  font-weight: tokens.$font-weight-bold;
+}
+
+.success-message {
+  background: tokens.$color-success-bg;
+  color: tokens.$color-success-text;
+}
+
+.error-message {
+  background: tokens.$color-error-bg;
+  color: tokens.$color-error-text;
+}
+
+.empty-message {
+  margin-top: tokens.$space-6;
+  background: tokens.$color-card;
+  border: 1px solid tokens.$color-border;
+  color: tokens.$color-text-muted;
+}
+
+/* Objektübersicht */
+
+.object-list {
+  display: grid;
+  gap: tokens.$space-5;
+  margin-top: tokens.$space-6;
+}
+
+.object-card {
+  display: grid;
+  gap: tokens.$space-5;
+  background: tokens.$color-card;
+  border: 1px solid tokens.$color-border;
+  border-radius: tokens.$radius;
+  padding: tokens.$space-5;
+  box-shadow: tokens.$shadow-card;
+}
+
+.print-area {
+  display: grid;
+  justify-items: center;
+  gap: tokens.$space-4;
+}
+
+.print-title {
+  margin: 0;
+  text-align: center;
+}
+
+.object-card-meta {
+  display: grid;
+  gap: tokens.$space-2;
+}
+
+.object-id {
+  margin: 0;
+  color: tokens.$color-text-muted;
+  font-size: tokens.$font-size-md;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: tokens.$space-2;
+  color: tokens.$color-primary-dark;
+  font-weight: tokens.$font-weight-bold;
+}
+
+.checkbox-row input {
+  width: 20px;
+  height: 20px;
+}
+
+.object-actions {
+  display: grid;
+  gap: tokens.$space-3;
+}
+
+.qr-box {
+  display: flex;
+  justify-content: center;
+  padding: tokens.$space-3 0;
+  background: transparent;
+  border: 0;
+}
+
+/* Objektseite */
+
+.object-image {
+  width: 100%;
+  margin-bottom: tokens.$space-5;
+  border-radius: tokens.$radius;
+  border: 1px solid tokens.$color-border;
+}
+
+.info-block {
+  margin-bottom: tokens.$space-5;
+}
+
+.info-block h2 {
+  margin-bottom: tokens.$space-3;
+}
+
+/* Desktop Admin */
+
+@media (min-width: 900px) {
+  .admin-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .form-field--full,
+  .admin-form .primary-button {
+    grid-column: 1 / -1;
+  }
+
+  .object-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .action-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .object-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Druck */
+
+@media print {
+  body {
+    background: white;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .app-page {
+    min-height: auto;
+    padding: 0;
+    background: white;
+  }
+
+  .admin-page {
+    max-width: none;
+  }
+
+  .object-list {
+    display: block;
+    margin: 0;
+  }
+
+  .object-card {
+    display: block;
+    border: 0;
+    box-shadow: none;
+    background: white;
+    padding: 0;
+    page-break-after: always;
+  }
+
+  .print-area {
+    display: grid;
+    justify-items: center;
+    gap: 24px;
+    margin-top: 40px;
+  }
+
+  .print-title {
+    color: black;
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .qr-box {
+    padding: 0;
+    background: white;
+    border: 0;
+  }
+}
+
+.danger-button {
+  width: 100%;
+  min-height: 52px;
+  border: 0;
+  border-radius: tokens.$radius-sm;
+  background: tokens.$color-error-bg;
+  color: tokens.$color-error-text;
+  font-weight: tokens.$font-weight-bold;
+  cursor: pointer;
+
+  &:hover {
+    background: #fecaca;
+  }
+} 
+ 
+============================================================ 
+DATEI: package.json 
+============================================================ 
+ 
+{
+  "name": "dfb-discovery-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "backend": "nodemon backend/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "i18next": "^26.2.0",
+    "lucide-react": "^1.16.0",
+    "qrcode.react": "^4.2.0",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "react-i18next": "^17.0.8",
+    "react-router-dom": "^7.15.1",
+    "sass": "^1.99.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.12.3",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "eslint": "^10.3.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.6.0",
+    "nodemon": "^3.1.14",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.59.2",
+    "vite": "^8.0.12"
+  }
+}
+ 
