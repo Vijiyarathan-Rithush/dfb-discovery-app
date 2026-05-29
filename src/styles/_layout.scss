@@ -1,0 +1,349 @@
+@use 'tokens';
+
+.app-page {
+  min-height: 100svh;
+  padding: tokens.$space-6 tokens.$space-5;
+  background: tokens.$color-background;
+}
+
+.admin-page {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+.card {
+  background: tokens.$color-card;
+  border: 1px solid tokens.$color-border;
+  border-radius: tokens.$radius;
+  padding: tokens.$space-6;
+  box-shadow: tokens.$shadow-card;
+}
+
+.eyebrow {
+  margin-bottom: tokens.$space-3;
+  color: tokens.$color-text-muted;
+  font-size: tokens.$font-size-sm;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.card h1 {
+  margin-bottom: tokens.$space-4;
+}
+
+.card p {
+  margin-bottom: tokens.$space-5;
+}
+
+.action-list {
+  display: grid;
+  gap: tokens.$space-3;
+  margin-top: tokens.$space-6;
+}
+
+.primary-link,
+.secondary-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  border-radius: tokens.$radius-sm;
+  padding: tokens.$space-3 tokens.$space-5;
+  text-decoration: none;
+  font-size: tokens.$font-size-lg;
+}
+
+.primary-link {
+  background: tokens.$color-accent;
+  color: tokens.$color-text;
+
+  &:hover {
+    background: tokens.$color-accent-hover;
+    color: tokens.$color-text;
+    text-decoration: none;
+  }
+}
+
+.secondary-link {
+  border: 1px solid tokens.$color-border;
+  background: tokens.$color-card;
+  color: tokens.$color-text;
+
+  &:hover {
+    border-color: tokens.$color-accent;
+    color: tokens.$color-text;
+    text-decoration: none;
+  }
+}
+
+/* Admin Formular */
+
+.admin-form {
+  display: grid;
+  gap: tokens.$space-4;
+  margin-top: tokens.$space-6;
+  margin-bottom: tokens.$space-6;
+}
+
+.form-field {
+  display: grid;
+  gap: tokens.$space-2;
+}
+
+.form-field label {
+  color: tokens.$color-primary-dark;
+  font-weight: tokens.$font-weight-bold;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  border: 1px solid tokens.$color-border;
+  border-radius: tokens.$radius-sm;
+  padding: tokens.$space-3;
+  background: tokens.$color-card;
+  color: tokens.$color-text;
+}
+
+.form-field input {
+  min-height: 52px;
+}
+
+.form-field textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.form-hint {
+  color: tokens.$color-text-muted;
+  font-size: tokens.$font-size-sm;
+}
+
+.required-star {
+  color: tokens.$color-error-text;
+  font-weight: tokens.$font-weight-bold;
+}
+
+.primary-button {
+  width: 100%;
+  min-height: 52px;
+  background: tokens.$color-accent;
+  color: tokens.$color-text;
+  font-weight: tokens.$font-weight-bold;
+
+  &:hover {
+    background: tokens.$color-accent-hover;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+.success-message,
+.error-message,
+.empty-message {
+  border-radius: tokens.$radius-sm;
+  padding: tokens.$space-3;
+  font-weight: tokens.$font-weight-bold;
+}
+
+.success-message {
+  background: tokens.$color-success-bg;
+  color: tokens.$color-success-text;
+}
+
+.error-message {
+  background: tokens.$color-error-bg;
+  color: tokens.$color-error-text;
+}
+
+.empty-message {
+  margin-top: tokens.$space-6;
+  background: tokens.$color-card;
+  border: 1px solid tokens.$color-border;
+  color: tokens.$color-text-muted;
+}
+
+/* Objektübersicht */
+
+.object-list {
+  display: grid;
+  gap: tokens.$space-5;
+  margin-top: tokens.$space-6;
+}
+
+.object-card {
+  display: grid;
+  gap: tokens.$space-5;
+  background: tokens.$color-card;
+  border: 1px solid tokens.$color-border;
+  border-radius: tokens.$radius;
+  padding: tokens.$space-5;
+  box-shadow: tokens.$shadow-card;
+}
+
+.print-area {
+  display: grid;
+  justify-items: center;
+  gap: tokens.$space-4;
+}
+
+.print-title {
+  margin: 0;
+  text-align: center;
+}
+
+.object-card-meta {
+  display: grid;
+  gap: tokens.$space-2;
+}
+
+.object-id {
+  margin: 0;
+  color: tokens.$color-text-muted;
+  font-size: tokens.$font-size-md;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: tokens.$space-2;
+  color: tokens.$color-primary-dark;
+  font-weight: tokens.$font-weight-bold;
+}
+
+.checkbox-row input {
+  width: 20px;
+  height: 20px;
+}
+
+.object-actions {
+  display: grid;
+  gap: tokens.$space-3;
+}
+
+.qr-box {
+  display: flex;
+  justify-content: center;
+  padding: tokens.$space-3 0;
+  background: transparent;
+  border: 0;
+}
+
+/* Objektseite */
+
+.object-image {
+  width: 100%;
+  margin-bottom: tokens.$space-5;
+  border-radius: tokens.$radius;
+  border: 1px solid tokens.$color-border;
+}
+
+.info-block {
+  margin-bottom: tokens.$space-5;
+}
+
+.info-block h2 {
+  margin-bottom: tokens.$space-3;
+}
+
+/* Desktop Admin */
+
+@media (min-width: 900px) {
+  .admin-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .form-field--full,
+  .admin-form .primary-button {
+    grid-column: 1 / -1;
+  }
+
+  .object-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .action-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .object-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Druck */
+
+@media print {
+  body {
+    background: white;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .app-page {
+    min-height: auto;
+    padding: 0;
+    background: white;
+  }
+
+  .admin-page {
+    max-width: none;
+  }
+
+  .object-list {
+    display: block;
+    margin: 0;
+  }
+
+  .object-card {
+    display: block;
+    border: 0;
+    box-shadow: none;
+    background: white;
+    padding: 0;
+    page-break-after: always;
+  }
+
+  .print-area {
+    display: grid;
+    justify-items: center;
+    gap: 24px;
+    margin-top: 40px;
+  }
+
+  .print-title {
+    color: black;
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .qr-box {
+    padding: 0;
+    background: white;
+    border: 0;
+  }
+}
+
+.danger-button {
+  width: 100%;
+  min-height: 52px;
+  border: 0;
+  border-radius: tokens.$radius-sm;
+  background: tokens.$color-error-bg;
+  color: tokens.$color-error-text;
+  font-weight: tokens.$font-weight-bold;
+  cursor: pointer;
+
+  &:hover {
+    background: #fecaca;
+  }
+}

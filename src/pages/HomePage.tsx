@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom'
 import PageLayout from '../components/layout/PageLayout'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 
-/** Hauptseite (/) – Einstieg mit Sprachwahl und Weg zum Quiz. */
 function HomePage() {
   const navigate = useNavigate()
 
@@ -10,13 +9,22 @@ function HomePage() {
     <PageLayout
       headerRight={<LanguageSwitcher />}
       footer={
-        <button type="button" onClick={() => navigate('/quiz')}>
-          Weiter zum Quiz
-        </button>
+        <div className="action-list">
+          <button type="button" onClick={() => navigate('/quiz')}>
+            Weiter zum Quiz
+          </button>
+
+          <button type="button" onClick={() => navigate('/admin')}>
+            Admin öffnen
+          </button>
+        </div>
       }
     >
       <h1>Dampflokomotive</h1>
-      <p>Platzhalter – Inhalt der Hauptseite folgt.</p>
+      <p>
+        Scanne einen QR-Code am Objekt und entdecke Informationen,
+        Hotspots und Quizfragen zur Furka-Bergstrecke.
+      </p>
     </PageLayout>
   )
 }
