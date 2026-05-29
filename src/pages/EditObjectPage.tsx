@@ -43,8 +43,12 @@ function EditObjectPage() {
     const form = event.currentTarget
     const formData = new FormData(form)
     const selectedImage = formData.get('image')
+    const removeImage = formData.get('removeImage') === 'true'
 
-    if (!(selectedImage instanceof File) || selectedImage.size === 0) {
+    if (removeImage) {
+      formData.set('imageUrl', '')
+      formData.set('removeImage', 'true')
+    } else if (!(selectedImage instanceof File) || selectedImage.size === 0) {
       formData.delete('image')
       formData.set('imageUrl', object.imageUrl)
     }
@@ -181,14 +185,25 @@ function EditObjectPage() {
           </div>
 
           {object.imageUrl && (
-            <div className="form-field form-field--full">
-              <p className="form-hint">Aktuelles Bild:</p>
-              <img
-                className="object-image-preview"
-                src={object.imageUrl}
-                alt={object.titleDe}
-              />
-            </div>
+            <>
+              <div className="form-field form-field--full">
+                <p className="form-hint">Aktuelles Bild:</p>
+                <img
+                  className="object-image-preview"
+                  src={object.imageUrl}
+                  alt={object.titleDe}
+                />
+              </div>
+
+              <label className="checkbox-row form-field--full">
+                <input
+                  type="checkbox"
+                  name="removeImage"
+                  value="true"
+                />
+                Bild entfernen
+              </label>
+            </>
           )}
 
           <button className="primary-button" type="submit">

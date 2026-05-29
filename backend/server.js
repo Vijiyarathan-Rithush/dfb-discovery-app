@@ -68,9 +68,13 @@ app.get('/api/objects/:id', (req, res) => {
 })
 
 app.post('/api/objects', upload.single('image'), (req, res) => {
+  const shouldRemoveImage = req.body.removeImage === 'true'
+
   const imageUrl = req.file
     ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`
-    : req.body.imageUrl || ''
+    : shouldRemoveImage
+      ? ''
+      : req.body.imageUrl || ''
 
   const newObject = {
     id: req.body.id,
