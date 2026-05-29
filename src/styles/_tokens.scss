@@ -1,0 +1,67 @@
+//  DFB-Entdecker-App – Design Tokens
+//  Einbinden in Komponenten:  @use '../styles/tokens';
+
+$color-primary-dark: #2b1b13; 
+$color-background:   #f1e6d2; 
+$color-card:         #fffefa; 
+$color-accent:       #d7ae77; 
+$color-accent-hover: #c99c60; 
+
+$color-text:        #2a201b; 
+$color-text-muted:  #69594b; 
+$color-cream-text:  #f7ead4; 
+$color-brass-light: #e8cda4; 
+
+$color-border:       #dfc49d; 
+$color-border-soft:  #e1c8a5; 
+$color-progress-bg:  #efe2cf; 
+$color-list-icon-bg: #f4e1c4; 
+$color-map-bg:       #e6d4b8; 
+
+$color-success-bg:   #dcfce7;
+$color-success-text: #166534;
+$color-error-bg:     #fee2e2;
+$color-error-text:   #991b1b;
+
+$font-sans:    Arial, Helvetica, sans-serif;
+$font-heading: $font-sans;
+
+$font-size-base: 16px;
+$line-height:    1.5;
+
+$font-size-xs:  12px;
+$font-size-sm:  14px;
+$font-size-md:  16px;
+$font-size-lg:  18px;
+$font-size-xl:  22px;
+$font-size-2xl: 28px;
+$font-size-3xl: 36px;
+
+$font-weight-regular: 400;
+$font-weight-medium:  500;
+$font-weight-bold:    700;
+
+$letter-spacing-heading: 0.04em;
+
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-5: 20px;
+$space-6: 24px;
+$space-7: 32px;
+$space-8: 48px;
+
+$radius-sm:   18px;
+$radius:      24px;
+$radius-lg:   28px;
+$radius-pill: 999px;
+
+$shadow-card:     0 10px 24px rgba(43, 27, 19, 0.08);
+$shadow-elevated: 0 18px 45px rgba(43, 27, 19, 0.14);
+
+$breakpoints: (
+  mobile:  480px,
+  tablet:  768px,
+  desktop: 1024px,
+);

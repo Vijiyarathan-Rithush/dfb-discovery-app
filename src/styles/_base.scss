@@ -1,0 +1,74 @@
+//  DFB-Entdecker-App – Globale Basis-Styles
+
+@use 'tokens';
+@use 'mixins';
+
+html,
+body {
+  background: tokens.$color-background;
+  color: tokens.$color-text;
+  font-family: tokens.$font-sans;
+  font-size: tokens.$font-size-base;
+  line-height: tokens.$line-height;
+}
+
+#root {
+  width: 100%;
+  min-height: 100svh;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+
+  @include mixins.respond-to(tablet) {
+    max-width: 480px;
+    box-shadow: tokens.$shadow-elevated;
+  }
+}
+
+h1,
+h2,
+h3 {
+  font-family: tokens.$font-heading;
+  font-weight: tokens.$font-weight-regular;
+  color: tokens.$color-primary-dark;
+  letter-spacing: tokens.$letter-spacing-heading;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: tokens.$font-size-3xl;
+}
+
+h2 {
+  font-size: tokens.$font-size-2xl;
+}
+
+h3 {
+  font-size: tokens.$font-size-xl;
+  font-weight: tokens.$font-weight-bold;
+}
+
+p {
+  color: tokens.$color-text;
+}
+
+a {
+  color: tokens.$color-accent-hover;
+  text-decoration: none;
+
+  &:hover {
+    color: tokens.$color-accent;
+    text-decoration: underline;
+  }
+
+  @include mixins.focus-ring;
+}
+
+button {
+  @include mixins.button-base;
+}
+
+:focus-visible {
+  outline: 2px solid tokens.$color-accent;
+  outline-offset: 2px;
+}
