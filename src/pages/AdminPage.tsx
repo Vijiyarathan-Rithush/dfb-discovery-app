@@ -8,25 +8,25 @@ function AdminPage() {
   const [error, setError] = useState('')
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
-    event.preventDefault()
-    setMessage('')
-    setError('')
+  event.preventDefault()
+  setMessage('')
+  setError('')
 
-    const form = event.currentTarget
-    const formData = new FormData(form)
-    const rawId = String(formData.get('id')).trim()
-    const safeId = rawId.toLowerCase().replace(/\s+/g, '-')
+  const form = event.currentTarget
+  const formData = new FormData(form)
+  const rawId = String(formData.get('id')).trim()
+  const safeId = rawId.toLowerCase().replace(/\s+/g, '-')
 
-    formData.set('id', safeId)
+  formData.set('id', safeId)
 
-    try {
-      await saveObject(formData)
-      setMessage('Objekt wurde gespeichert.')
-      form.reset()
-    } catch {
-      setError('Objekt konnte nicht gespeichert werden.')
-    }
+  try {
+    await saveObject(formData)
+    setMessage('Objekt wurde gespeichert.')
+    form.reset()
+  } catch {
+    setError('Objekt konnte nicht gespeichert werden.')
   }
+}
 
   return (
     <main className="app-page admin-page">
@@ -97,14 +97,14 @@ function AdminPage() {
           </div>
 
           <div className="form-field form-field--full">
-            <label htmlFor="image">Bild hochladen</label>
-            <input
-              id="image"
-              name="image"
-              type="file"
-              accept="image/*"
-            />
-          </div>
+  <label htmlFor="image">Bild hochladen</label>
+  <input
+    id="image"
+    name="image"
+    type="file"
+    accept="image/*"
+  />
+</div>
 
           <button className="primary-button" type="submit">
             Objekt speichern
