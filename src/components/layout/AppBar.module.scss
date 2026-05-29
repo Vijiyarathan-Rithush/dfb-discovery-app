@@ -3,9 +3,9 @@
   top: 0;
   z-index: 10;
   display: grid;
-  grid-template-columns: 48px 1fr 48px;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: tokens.$space-2;
+  gap: tokens.$space-3;
   min-height: 64px;
   padding: tokens.$space-3 tokens.$space-4;
   background: tokens.$color-primary-dark;
@@ -24,13 +24,13 @@
 .side {
   display: flex;
   align-items: center;
+  gap: tokens.$space-2;
 
   &.right {
     justify-content: flex-end;
   }
 }
 
-// Der globale button-base-Stil wird hier zurückgesetzt: nur Icon, kein Hintergrund.
 .iconButton {
   display: inline-flex;
   align-items: center;
@@ -48,4 +48,21 @@
   }
 
   @include mixins.focus-ring;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: tokens.$space-2 tokens.$space-3;
+  border-radius: tokens.$radius-sm;
+  background: tokens.$color-brass-light;
+  cursor: pointer;
+
+  @include mixins.focus-ring;
+}
+
+.logoImage {
+  height: 32px;   
+  width: auto;
 }
