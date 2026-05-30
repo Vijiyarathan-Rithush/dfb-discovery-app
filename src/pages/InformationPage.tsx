@@ -1,66 +1,54 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import VisitorLayout from '../components/visitor/VisitorLayout'
-import { getObjectById } from '../api/ObjectApi'
-import type { ObjectData } from '../types/ObjectData'
 import { getStoredLanguage, textForLanguage } from '../utils/language'
+import { resolveAssetUrl } from '../utils/assetUrl'
+import { useObject } from '../hooks/useObject'
 import styles from './InformationPage.module.scss'
 
 type InfoTab = 'short' | 'technical'
 
-function resolveAssetUrl(url?: string) {
-  if (!url) return ''
-  if (
-    url.startsWith('http') ||
-    url.startsWith('blob:') ||
-    url.startsWith('data:')
-  ) {
-    return url
-  }
-
-  if (url.startsWith('/')) {
-    return `${import.meta.env.BASE_URL}${url.slice(1)}`
-  }
-
-  return `${import.meta.env.BASE_URL}${url}`
-}
-
 function InformationPage() {
   const { objectId } = useParams()
-  const [object, setObject] = useState<ObjectData | null>(null)
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
+  const { object, error, isLoading } = useObject(objectId)
   const [activeTab, setActiveTab] = useState<InfoTab>('short')
 
   const language = getStoredLanguage()
   const isFr = language === 'FR'
 
-  useEffect(() => {
-    async function loadObject() {
-      if (!objectId) {
-        setError('Keine Objekt-ID vorhanden.')
-        setIsLoading(false)
-        return
+  const labels = isFr
+    ? {
+        title: 'Information',
+        loading: 'Chargement de l’objet...',
+        notFound: 'Objet introuvable.',
+        back: 'Retour',
+        imageMissing: 'Image non disponible',
+        tabLabel: 'Type d’information',
+        short: 'Résumé',
+        technical: 'Technique',
+        noInfo: 'Aucune information disponible.',
+        noTechnicalInfo: 'Aucune description technique disponible.',
+        continueQuiz: 'Continuer au quiz',
       }
-
-      try {
-        const loaded = await getObjectById(objectId)
-        setObject(loaded)
-      } catch {
-        setError('Objekt konnte nicht geladen werden.')
-      } finally {
-        setIsLoading(false)
+    : {
+        title: 'Information',
+        loading: 'Objekt wird geladen...',
+        notFound: 'Objekt nicht gefunden.',
+        back: 'Zurück',
+        imageMissing: 'Bild nicht verfügbar',
+        tabLabel: 'Informationstiefe',
+        short: 'Kurz erklärt',
+        technical: 'Technisch',
+        noInfo: 'Keine Information vorhanden.',
+        noTechnicalInfo: 'Keine technische Beschreibung vorhanden.',
+        continueQuiz: 'Weiter zum Quiz',
       }
-    }
-
-    loadObject()
-  }, [objectId])
 
   if (isLoading) {
     return (
-      <VisitorLayout title="Information">
+      <VisitorLayout title={labels.title}>
         <section className={styles.messageCard}>
-          <p>{isFr ? 'Chargement de l’objet...' : 'Objekt wird geladen...'}</p>
+          <p>{labels.loading}</p>
         </section>
       </VisitorLayout>
     )
@@ -68,11 +56,11 @@ function InformationPage() {
 
   if (error || !object) {
     return (
-      <VisitorLayout title="Information">
+      <VisitorLayout title={labels.title}>
         <section className={styles.messageCard}>
-          <p>{error || (isFr ? 'Objet introuvable.' : 'Objekt nicht gefunden.')}</p>
+          <p>{error || labels.notFound}</p>
           <Link to={objectId ? `/object/${objectId}` : '/'}>
-            {isFr ? 'Retour' : 'Zurück'}
+            {labels.back}
           </Link>
         </section>
       </VisitorLayout>
@@ -80,41 +68,37 @@ function InformationPage() {
   }
 
   const title = textForLanguage(language, object.titleDe, object.titleFr)
-
   const imageUrl = resolveAssetUrl(object.imageUrl)
 
   const imageAlt = textForLanguage(
     language,
     object.imageAltDe || title,
-    object.imageAltFr || object.imageAltDe || title
+    object.imageAltFr || object.imageAltDe || title,
   )
 
-  const shortLabel = isFr ? 'Résumé' : 'Kurz erklärt'
-  const technicalLabel = isFr ? 'Technique' : 'Technisch'
+  const shortText =
+    language === 'FR'
+      ? object.shortFr?.trim() || object.shortDe?.trim() || ''
+      : object.shortDe?.trim() || ''
 
-  const shortText = textForLanguage(
-  language,
-  object.shortDe,
-  object.shortFr || object.shortDe
-)
+  const technicalText =
+    language === 'FR'
+      ? object.technicalFr?.trim() || object.technicalDe?.trim() || ''
+      : object.technicalDe?.trim() || ''
 
-const technicalText = textForLanguage(
-  language,
-  object.technicalDe,
-  object.technicalFr || object.technicalDe
-)
-
-const activeLabel = activeTab === 'short' ? shortLabel : technicalLabel
-const activeText = activeTab === 'short' ? shortText : technicalText
+  const activeLabel = activeTab === 'short' ? labels.short : labels.technical
+  const activeText = activeTab === 'short' ? shortText : technicalText
+  const emptyText =
+    activeTab === 'technical' ? labels.noTechnicalInfo : labels.noInfo
 
   return (
-    <VisitorLayout title="Information">
+    <VisitorLayout title={labels.title}>
       <section className={styles.hero} aria-label={title}>
         {imageUrl ? (
           <img className={styles.heroImage} src={imageUrl} alt={imageAlt} />
         ) : (
           <div className={styles.placeholder} role="img" aria-label={imageAlt}>
-            {isFr ? 'Image non disponible' : 'Bild nicht verfügbar'}
+            {labels.imageMissing}
           </div>
         )}
       </section>
@@ -123,7 +107,7 @@ const activeText = activeTab === 'short' ? shortText : technicalText
         <div
           className={styles.tabs}
           role="tablist"
-          aria-label={isFr ? 'Type d’information' : 'Informationstiefe'}
+          aria-label={labels.tabLabel}
         >
           <button
             type="button"
@@ -132,7 +116,7 @@ const activeText = activeTab === 'short' ? shortText : technicalText
             aria-selected={activeTab === 'short'}
             onClick={() => setActiveTab('short')}
           >
-            {shortLabel}
+            {labels.short}
           </button>
 
           <button
@@ -142,22 +126,17 @@ const activeText = activeTab === 'short' ? shortText : technicalText
             aria-selected={activeTab === 'technical'}
             onClick={() => setActiveTab('technical')}
           >
-            {technicalLabel}
+            {labels.technical}
           </button>
         </div>
 
         <article className={styles.card} role="tabpanel">
           <h2 className={styles.cardTitle}>{activeLabel}</h2>
-          <p className={styles.text}>
-            {activeText ||
-              (isFr
-                ? 'Aucune information disponible.'
-                : 'Keine Information vorhanden.')}
-          </p>
+          <p className={styles.text}>{activeText || emptyText}</p>
         </article>
 
         <Link className={styles.quizButton} to={`/object/${object.id}/quiz`}>
-          {isFr ? 'Continuer au quiz' : 'Weiter zum Quiz'}
+          {labels.continueQuiz}
         </Link>
       </section>
     </VisitorLayout>

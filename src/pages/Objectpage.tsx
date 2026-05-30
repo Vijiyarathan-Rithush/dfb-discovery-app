@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { getObjectById } from '../api/ObjectApi'
-import type { ObjectData } from '../types/ObjectData'
 import type { Language } from '../components/LanguageSwitcher'
 import { getStoredLanguage, persistLanguage, textForLanguage } from '../utils/language'
+import { resolveAssetUrl } from '../utils/assetUrl'
+import { useObject } from '../hooks/useObject'
 import styles from './ObjectPage.module.scss'
 
 const DISCOVERED_KEY = 'dfb-discovered-objects'
@@ -27,32 +27,42 @@ function markDiscovered(objectId: string) {
 
 function ObjectPage() {
   const { objectId } = useParams()
-  const [object, setObject] = useState<ObjectData | null>(null)
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
+  const { object, error, isLoading } = useObject(objectId)
   const [language, setLanguage] = useState<Language>(getStoredLanguage)
 
+  const isFr = language === 'FR'
+
+  const labels = isFr
+    ? {
+        loading: 'Chargement de l’objet...',
+        notFoundTitle: 'Objet introuvable',
+        notFoundText: 'L’objet souhaité n’a pas pu être chargé.',
+        back: 'Retour à l’aperçu',
+        imageMissing: 'Image non disponible',
+        languageGroup: 'Choisir la langue',
+        language: 'Langue',
+        audioUnsupported: 'Votre navigateur ne supporte pas la lecture audio.',
+        transcript: 'Afficher la transcription audio',
+        interactive: 'Vue interactive',
+      }
+    : {
+        loading: 'Objekt wird geladen...',
+        notFoundTitle: 'Objekt nicht gefunden',
+        notFoundText: 'Das gewünschte Objekt konnte nicht geladen werden.',
+        back: 'Zurück zur Übersicht',
+        imageMissing: 'Bild nicht verfügbar',
+        languageGroup: 'Sprache wählen',
+        language: 'Sprache',
+        audioUnsupported: 'Ihr Browser unterstützt die Audiowiedergabe nicht.',
+        transcript: 'Textversion zum Audio anzeigen',
+        interactive: 'Interaktive Ansicht',
+      }
+
   useEffect(() => {
-    async function loadObject() {
-      if (!objectId) {
-        setError('Keine Objekt-ID vorhanden.')
-        setIsLoading(false)
-        return
-      }
-
-      try {
-        const loaded = await getObjectById(objectId)
-        setObject(loaded)
-        markDiscovered(objectId)
-      } catch {
-        setError('Objekt konnte nicht geladen werden.')
-      } finally {
-        setIsLoading(false)
-      }
+    if (objectId && object) {
+      markDiscovered(objectId)
     }
-
-    loadObject()
-  }, [objectId])
+  }, [objectId, object])
 
   function handleLanguageChange(nextLanguage: Language) {
     setLanguage(nextLanguage)
@@ -62,7 +72,7 @@ function ObjectPage() {
   if (isLoading) {
     return (
       <main className={styles.loading}>
-        <p>Objekt wird geladen...</p>
+        <p>{labels.loading}</p>
       </main>
     )
   }
@@ -71,21 +81,30 @@ function ObjectPage() {
     return (
       <main className={styles.error}>
         <section className={styles.errorCard}>
-          <h1 className={styles.errorTitle}>Objekt nicht gefunden</h1>
-          <p>{error || 'Das gewünschte Objekt konnte nicht geladen werden.'}</p>
+          <h1 className={styles.errorTitle}>{labels.notFoundTitle}</h1>
+          <p>{error || labels.notFoundText}</p>
           <Link className={styles.backLink} to="/admin">
-            Zurück zur Übersicht
+            {labels.back}
           </Link>
         </section>
       </main>
     )
   }
 
-  const isFr = language === 'FR'
   const title = textForLanguage(language, object.titleDe, object.titleFr)
   const shortText = textForLanguage(language, object.shortDe, object.shortFr)
-  const imageAlt = textForLanguage(language, object.imageAltDe || title, object.imageAltFr)
-  const audioUrl = textForLanguage(language, object.audioUrlDe, object.audioUrlFr)
+  const imageUrl = resolveAssetUrl(object.imageUrl)
+
+  const imageAlt = textForLanguage(
+    language,
+    object.imageAltDe || title,
+    object.imageAltFr || object.imageAltDe || title,
+  )
+
+  const audioUrl = resolveAssetUrl(
+    textForLanguage(language, object.audioUrlDe, object.audioUrlFr),
+  )
+
   const audioTranscript = textForLanguage(
     language,
     object.audioTranscriptDe,
@@ -95,16 +114,20 @@ function ObjectPage() {
   return (
     <main className={styles.shell}>
       <section className={styles.hero} aria-label={title}>
-        {object.imageUrl ? (
-          <img className={styles.heroImage} src={object.imageUrl} alt={imageAlt} />
+        {imageUrl ? (
+          <img className={styles.heroImage} src={imageUrl} alt={imageAlt} />
         ) : (
           <div className={styles.heroPlaceholder} role="img" aria-label={imageAlt}>
-            {isFr ? 'Image non disponible' : 'Bild nicht verfügbar'}
+            {labels.imageMissing}
           </div>
         )}
 
-        <div className={styles.languageOverlay} role="group" aria-label={isFr ? 'Choisir la langue' : 'Sprache wählen'}>
-          <span className={styles.languageLabel}>{isFr ? 'Langue' : 'Sprache'}</span>
+        <div
+          className={styles.languageOverlay}
+          role="group"
+          aria-label={labels.languageGroup}
+        >
+          <span className={styles.languageLabel}>{labels.language}</span>
 
           <div className={styles.languageOptions}>
             {(['DE', 'FR'] as const).map((lang) => (
@@ -129,22 +152,20 @@ function ObjectPage() {
         {audioUrl && (
           <div className={styles.audioBlock}>
             <audio className={styles.audio} controls src={audioUrl}>
-              {isFr
-                ? 'Votre navigateur ne supporte pas la lecture audio.'
-                : 'Ihr Browser unterstützt die Audiowiedergabe nicht.'}
+              {labels.audioUnsupported}
             </audio>
           </div>
         )}
 
         {audioTranscript && (
           <details className={styles.transcript}>
-            <summary>{isFr ? 'Transcription audio' : 'Textversion zum Audio anzeigen'}</summary>
+            <summary>{labels.transcript}</summary>
             <p>{audioTranscript}</p>
           </details>
         )}
 
         <Link className={styles.primaryAction} to={`/object/${object.id}/interactive`}>
-          {isFr ? 'Vue interactive' : 'Interaktive ansicht'}
+          {labels.interactive}
         </Link>
       </section>
     </main>

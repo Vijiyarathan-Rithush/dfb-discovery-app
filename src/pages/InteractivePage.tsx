@@ -1,48 +1,46 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Info } from 'lucide-react'
 import VisitorLayout from '../components/visitor/VisitorLayout'
-import { getObjectById } from '../api/ObjectApi'
-import type { Hotspot, ObjectData } from '../types/ObjectData'
+import type { Hotspot } from '../types/ObjectData'
 import { getStoredLanguage, textForLanguage } from '../utils/language'
+import { resolveAssetUrl } from '../utils/assetUrl'
+import { useObject } from '../hooks/useObject'
 import styles from './InteractivePage.module.scss'
 
 function InteractivePage() {
   const { objectId } = useParams()
-  const [object, setObject] = useState<ObjectData | null>(null)
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
+  const { object, error, isLoading } = useObject(objectId)
   const [activeHotspot, setActiveHotspot] = useState<Hotspot | null>(null)
+
   const language = getStoredLanguage()
   const isFr = language === 'FR'
 
-  useEffect(() => {
-    async function loadObject() {
-      if (!objectId) {
-        setError('Keine Objekt-ID vorhanden.')
-        setIsLoading(false)
-        return
+  const labels = isFr
+    ? {
+        pageTitle: 'Vue interactive',
+        loading: 'Chargement de l’objet...',
+        notFound: 'Objet introuvable.',
+        back: 'Retour',
+        imageMissing: 'Image non disponible',
+        emptyHint: 'Touchez les symboles pour découvrir les détails',
+        more: 'En savoir plus',
       }
-
-      try {
-        const loaded = await getObjectById(objectId)
-        setObject(loaded)
-        setActiveHotspot(null)
-      } catch {
-        setError('Objekt konnte nicht geladen werden.')
-      } finally {
-        setIsLoading(false)
+    : {
+        pageTitle: 'Interaktive Ansicht',
+        loading: 'Objekt wird geladen...',
+        notFound: 'Objekt nicht gefunden.',
+        back: 'Zurück',
+        imageMissing: 'Bild nicht verfügbar',
+        emptyHint: 'Tippen Sie auf die Symbole, um Details zu entdecken',
+        more: 'Mehr erfahren',
       }
-    }
-
-    loadObject()
-  }, [objectId])
 
   if (isLoading) {
     return (
-      <VisitorLayout title="Interaktive Ansicht">
+      <VisitorLayout title={labels.pageTitle}>
         <section className={styles.messageCard}>
-          <p>{isFr ? 'Chargement de l’objet...' : 'Objekt wird geladen...'}</p>
+          <p>{labels.loading}</p>
         </section>
       </VisitorLayout>
     )
@@ -50,11 +48,11 @@ function InteractivePage() {
 
   if (error || !object) {
     return (
-      <VisitorLayout title="Interaktive Ansicht">
+      <VisitorLayout title={labels.pageTitle}>
         <section className={styles.messageCard}>
-          <p>{error || (isFr ? 'Objet introuvable.' : 'Objekt nicht gefunden.')}</p>
+          <p>{error || labels.notFound}</p>
           <Link className={styles.moreLink} to={objectId ? `/object/${objectId}` : '/'}>
-            {isFr ? 'Retour' : 'Zurück'}
+            {labels.back}
           </Link>
         </section>
       </VisitorLayout>
@@ -62,28 +60,41 @@ function InteractivePage() {
   }
 
   const title = textForLanguage(language, object.titleDe, object.titleFr)
-  const imageAlt = textForLanguage(language, object.imageAltDe || title, object.imageAltFr)
+  const imageUrl = resolveAssetUrl(object.imageUrl)
+
+  const imageAlt = textForLanguage(
+    language,
+    object.imageAltDe || title,
+    object.imageAltFr || object.imageAltDe || title,
+  )
+
   const hotspots = object.hotspots ?? []
+
   const selectedTitle = activeHotspot
     ? textForLanguage(language, activeHotspot.titleDe, activeHotspot.titleFr)
     : ''
+
   const selectedText = activeHotspot
     ? textForLanguage(language, activeHotspot.textDe, activeHotspot.textFr)
     : ''
 
   return (
-    <VisitorLayout title={isFr ? 'Vue interactive' : 'Interaktive Ansicht'}>
+    <VisitorLayout title={labels.pageTitle}>
       <section className={styles.hero} aria-label={title}>
-        {object.imageUrl ? (
-          <img className={styles.heroImage} src={object.imageUrl} alt={imageAlt} />
+        {imageUrl ? (
+          <img className={styles.heroImage} src={imageUrl} alt={imageAlt} />
         ) : (
           <div className={styles.placeholder} role="img" aria-label={imageAlt}>
-            {isFr ? 'Image non disponible' : 'Bild nicht verfügbar'}
+            {labels.imageMissing}
           </div>
         )}
 
         {hotspots.map((hotspot) => {
-          const hotspotTitle = textForLanguage(language, hotspot.titleDe, hotspot.titleFr)
+          const hotspotTitle = textForLanguage(
+            language,
+            hotspot.titleDe,
+            hotspot.titleFr,
+          )
 
           return (
             <button
@@ -108,18 +119,14 @@ function InteractivePage() {
       <section className={styles.body} aria-live="polite">
         {!activeHotspot ? (
           <article className={`${styles.card} ${styles.emptyCard}`}>
-            <p className={styles.emptyText}>
-              {isFr
-                ? 'Touchez les symboles pour découvrir les détails'
-                : 'Tippen Sie auf die Symbole, um Details zu entdecken'}
-            </p>
+            <p className={styles.emptyText}>{labels.emptyHint}</p>
           </article>
         ) : (
           <article className={styles.card}>
             <h2 className={styles.hotspotTitle}>{selectedTitle}</h2>
             <p className={styles.hotspotText}>{selectedText}</p>
             <Link className={styles.moreLink} to={`/object/${object.id}/information`}>
-              {isFr ? 'En savoir plus' : 'Mehr erfahren'}
+              {labels.more}
             </Link>
           </article>
         )}
