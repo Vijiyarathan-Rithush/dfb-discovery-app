@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import InteractivePage from './pages/InteractivePage'
 import InformationPage from './pages/InformationPage'
@@ -13,15 +13,22 @@ function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
 
-      <Route path="/interaktiv" element={<InteractivePage />} />
-      <Route path="/information" element={<InformationPage />} />
-      <Route path="/quiz" element={<QuizPage />} />
+      {/* Objektbezogene Besucherrouten */}
+      <Route path="/object/:objectId" element={<ObjectPage />} />
+      <Route path="/object/:objectId/interactive" element={<InteractivePage />} />
+      <Route path="/object/:objectId/information" element={<InformationPage />} />
+      <Route path="/object/:objectId/quiz" element={<QuizPage />} />
 
+      {/* Allgemeine Routen (Fallback) */}
+      <Route path="/interaktiv" element={<Navigate to="/" replace />} />
+      <Route path="/information" element={<Navigate to="/" replace />} />
+      <Route path="/quiz" element={<Navigate to="/" replace />} />
+
+      {/* Admin-Routen */}
       <Route path="/admin" element={<AdminObjectsPage />} />
+      <Route path="/admin/objects" element={<AdminObjectsPage />} />
       <Route path="/admin/create" element={<AdminPage />} />
       <Route path="/admin/edit/:objectId" element={<EditObjectPage />} />
-
-      <Route path="/object/:objectId" element={<ObjectPage />} />
     </Routes>
   )
 }

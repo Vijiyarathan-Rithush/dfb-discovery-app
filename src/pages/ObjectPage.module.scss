@@ -1,0 +1,191 @@
+.shell {
+  width: min(100%, 402px);
+  min-height: 100svh;
+  margin-inline: auto;
+  background: tokens.$color-background;
+  color: tokens.$color-text;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: clamp(230px, 67vw, 270px);
+  overflow: hidden;
+  background: tokens.$color-map-bg;
+}
+
+.heroImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.heroPlaceholder {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  color: tokens.$color-text-muted;
+  text-align: center;
+  background: linear-gradient(135deg, tokens.$color-map-bg, tokens.$color-background);
+}
+
+.languageOverlay {
+  position: absolute;
+  inset: 21px 34px auto 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.languageLabel,
+.languageButton {
+  min-height: 36px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 8px;
+  background: tokens.$color-primary-dark;
+  color: tokens.$color-brass-light;
+  font-size: 13px;
+  line-height: 36px;
+  box-shadow: 0 8px 18px rgba(43, 27, 19, 0.18);
+}
+
+.languageOptions {
+  display: inline-flex;
+  gap: 24px;
+}
+
+.languageButton {
+  min-width: 49px;
+  cursor: pointer;
+
+  &[aria-pressed='true'] {
+    background: tokens.$color-accent;
+    color: tokens.$color-primary-dark;
+  }
+
+  &:hover {
+    background: tokens.$color-accent-hover;
+    color: tokens.$color-primary-dark;
+  }
+
+  &:focus-visible {
+    outline: 2px solid tokens.$color-cream-text;
+    outline-offset: 2px;
+  }
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 36px 34px 36px;
+  background: tokens.$color-background;
+}
+
+.title {
+  margin: 0;
+  color: tokens.$color-primary-dark;
+  font-size: 40px;
+  font-weight: tokens.$font-weight-regular;
+  letter-spacing: 0.01em;
+  line-height: 1.08;
+}
+
+.description {
+  margin: 32px 6px 0;
+  color: tokens.$color-text-muted;
+  font-size: 16px;
+  line-height: 1.18;
+}
+
+.audioBlock {
+  margin: 22px 6px 0;
+  color: tokens.$color-text-muted;
+}
+
+.audio {
+  width: 100%;
+  min-height: 42px;
+}
+
+.transcript {
+  margin-top: 10px;
+
+  summary {
+    cursor: pointer;
+    color: tokens.$color-accent-hover;
+    text-decoration: underline;
+  }
+
+  p {
+    margin-top: 8px;
+    color: tokens.$color-text-muted;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+}
+
+.primaryAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 49px;
+  margin-top: auto;
+  border-radius: 8px;
+  background: tokens.$color-accent;
+  color: #111;
+  font-size: 20px;
+  text-decoration: none;
+
+  &:hover {
+    background: tokens.$color-accent-hover;
+    color: #111;
+    text-decoration: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid tokens.$color-primary-dark;
+    outline-offset: 3px;
+  }
+}
+
+.status {
+  margin: 16px 6px 0;
+  color: tokens.$color-text-muted;
+  font-size: 14px;
+}
+
+.loading,
+.error {
+  width: min(100%, 402px);
+  min-height: 100svh;
+  margin-inline: auto;
+  padding: 32px 20px;
+  background: tokens.$color-background;
+}
+
+.errorCard {
+  margin-top: 56px;
+  padding: 22px;
+  border-radius: 10px;
+  background: tokens.$color-card;
+}
+
+.errorTitle {
+  margin: 0 0 12px;
+  color: tokens.$color-primary-dark;
+  font-size: 28px;
+}
+
+.backLink {
+  display: inline-flex;
+  margin-top: 18px;
+  color: tokens.$color-accent-hover;
+}

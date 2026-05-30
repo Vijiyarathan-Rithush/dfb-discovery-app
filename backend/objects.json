@@ -7,6 +7,63 @@
     "shortFr": "Locomotive à vapeur historique de la ligne sommitale de la Furka.",
     "technicalDe": "",
     "technicalFr": "",
-    "imageUrl": ""
+    "imageUrl": "http://localhost:3001/uploads/1780133669195-screenshot-2026-05-29-225720.png",
+    "imageAltDe": "",
+    "imageAltFr": "",
+    "audioUrlDe": "",
+    "audioUrlFr": "",
+    "audioTranscriptDe": "",
+    "audioTranscriptFr": "",
+    "locationHintDe": "",
+    "locationHintFr": "",
+    "hotspots": [
+      {
+        "id": "hs-1780134345606",
+        "titleDe": "q",
+        "titleFr": "1",
+        "textDe": "1",
+        "textFr": "",
+        "x": 44.31,
+        "y": 53.51
+      },
+      {
+        "id": "hs-1780134350101",
+        "titleDe": "1",
+        "titleFr": "1",
+        "textDe": "1",
+        "textFr": "1",
+        "x": 94.03,
+        "y": 18.91
+      },
+      {
+        "id": "hs-1780134350987",
+        "titleDe": "1",
+        "titleFr": "1",
+        "textDe": "1",
+        "textFr": "1",
+        "x": 4.03,
+        "y": 67.05
+      }
+    ],
+    "quiz": [
+      {
+        "id": "q-1780133655764",
+        "questionDe": "Te dua",
+        "questionFr": "1",
+        "answersDe": [
+          "lov u",
+          "asa",
+          "dsads"
+        ],
+        "answersFr": [
+          "asdasd",
+          "",
+          ""
+        ],
+        "correctAnswerIndex": 0,
+        "explanationDe": "asdasd",
+        "explanationFr": ""
+      }
+    ]
   }
 ]

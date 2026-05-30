@@ -1,0 +1,156 @@
+.body {
+  padding: 20px 15px 38px;
+  background: tokens.$color-background;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin: 0 0 18px 4px;
+  padding: 0 22px;
+  border-radius: 7px;
+  background: tokens.$color-accent;
+  color: #111;
+  font-size: 16px;
+}
+
+.question {
+  margin: 0 5px 20px;
+  color: #0d0d0d;
+  font-size: 25px;
+  font-weight: tokens.$font-weight-regular;
+  letter-spacing: 0;
+  line-height: 1.14;
+}
+
+.answers {
+  display: grid;
+  gap: 24px;
+}
+
+.answerButton {
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 56px;
+  padding: 0 20px;
+  border: 2px solid tokens.$color-accent;
+  border-radius: 7px;
+  background: tokens.$color-card;
+  color: #111;
+  font-size: 16px;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    border-color: tokens.$color-accent-hover;
+    background: #fffaf1;
+  }
+
+  &:disabled {
+    opacity: 1;
+    cursor: default;
+  }
+
+  &:focus-visible {
+    outline: 2px solid tokens.$color-primary-dark;
+    outline-offset: 3px;
+  }
+}
+
+.answerCorrect {
+  border-color: tokens.$color-success-text;
+  background: tokens.$color-success-bg;
+}
+
+.answerWrong {
+  border-color: tokens.$color-error-text;
+  background: tokens.$color-error-bg;
+}
+
+.feedback {
+  margin-top: 24px;
+}
+
+.feedbackMessage {
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-weight: tokens.$font-weight-bold;
+}
+
+.correctText {
+  background: tokens.$color-success-bg;
+  color: tokens.$color-success-text;
+}
+
+.wrongText {
+  background: tokens.$color-error-bg;
+  color: tokens.$color-error-text;
+}
+
+.explanation {
+  margin: 0 0 16px;
+  padding: 14px;
+  border-radius: 8px;
+  background: tokens.$color-card;
+  color: tokens.$color-text-muted;
+  line-height: 1.35;
+}
+
+.nextButton,
+.restartButton,
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 49px;
+  border: 0;
+  border-radius: 8px;
+  background: tokens.$color-accent;
+  color: #111;
+  font-size: 18px;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    background: tokens.$color-accent-hover;
+    color: #111;
+    text-decoration: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid tokens.$color-primary-dark;
+    outline-offset: 3px;
+  }
+}
+
+.resultCard,
+.messageCard {
+  padding: 22px;
+  border-radius: 8px;
+  background: tokens.$color-card;
+}
+
+.resultTitle {
+  margin: 0 0 12px;
+  color: tokens.$color-primary-dark;
+  font-size: 28px;
+}
+
+.resultText {
+  margin: 0 0 18px;
+  color: tokens.$color-text-muted;
+}
+
+.actions {
+  display: grid;
+  gap: 12px;
+}
+
+.backLink {
+  border: 1px solid tokens.$color-accent;
+  background: tokens.$color-card;
+}
