@@ -406,22 +406,22 @@
         "explanationFr": "La voiture rend visible l’expérience de voyage d’autrefois pour les visiteurs."
       },
       {
-        "id": "q-pw-2",
-        "questionDe": "Warum waren die Sitzbänke eher einfach gebaut?",
-        "questionFr": "Pourquoi les bancs étaient-ils plutôt simples ?",
+        "id": "q-pw-1",
+        "questionDe": "Was zeigt der historische Personenwagen besonders gut?",
+        "questionFr": "Que montre particulièrement bien la voiture voyageurs historique ?",
         "answersDe": [
-          "Sie mussten robust und platzsparend sein",
-          "Sie waren nur Dekoration",
-          "Sie wurden elektrisch beheizt"
+          "Wie Reisen früher auf Bergstrecken aussah",
+          "Wie moderne Hochgeschwindigkeitszüge funktionieren",
+          "Wie ein Zahnrad hergestellt wird"
         ],
         "answersFr": [
-          "Ils devaient être robustes et économiser de l’espace",
-          "Ils servaient seulement de décoration",
-          "Ils étaient chauffés électriquement"
+          "Comment on voyageait autrefois sur les lignes de montagne",
+          "Comment fonctionnent les trains à grande vitesse modernes",
+          "Comment une roue dentée est fabriquée"
         ],
         "correctAnswerIndex": 0,
-        "explanationDe": "Bei historischen Wagen standen Robustheit und einfache Wartung im Vordergrund.",
-        "explanationFr": "Dans les voitures historiques, la robustesse et l’entretien simple étaient prioritaires."
+        "explanationDe": "Der Wagen macht die frühere Reiseerfahrung für Besucherinnen und Besucher sichtbar.",
+        "explanationFr": "La voiture rend visible l’expérience de voyage d’autrefois pour les visiteurs."
       }
     ]
   }
