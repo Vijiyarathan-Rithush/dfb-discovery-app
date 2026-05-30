@@ -93,19 +93,19 @@ function InformationPage() {
   const technicalLabel = isFr ? 'Technique' : 'Technisch'
 
   const shortText = textForLanguage(
-    language,
-    object.shortDe,
-    object.shortFr || object.shortDe
-  )
+  language,
+  object.shortDe,
+  object.shortFr || object.shortDe
+)
 
-  const technicalText = textForLanguage(
-    language,
-    object.technicalDe || object.shortDe,
-    object.technicalFr || object.technicalDe || object.shortFr || object.shortDe
-  )
+const technicalText = textForLanguage(
+  language,
+  object.technicalDe,
+  object.technicalFr || object.technicalDe
+)
 
-  const activeLabel = activeTab === 'short' ? shortLabel : technicalLabel
-  const activeText = activeTab === 'short' ? shortText : technicalText
+const activeLabel = activeTab === 'short' ? shortLabel : technicalLabel
+const activeText = activeTab === 'short' ? shortText : technicalText
 
   return (
     <VisitorLayout title="Information">
