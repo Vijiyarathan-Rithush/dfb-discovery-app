@@ -36,11 +36,14 @@ function readObjects() {
     writeObjects([])
     return []
   }
+
   const data = fs.readFileSync(filePath, 'utf8').trim()
+
   if (!data) {
     writeObjects([])
     return []
   }
+
   return JSON.parse(data)
 }
 
@@ -63,6 +66,8 @@ function generateObjectId(titleDe, objects) {
     .trim()
     .replace(/\s+/g, '-')
 
+  if (!slug) slug = `objekt-${Date.now()}`
+
   const existingIds = objects.map((o) => o.id)
 
   if (!existingIds.includes(slug)) {
@@ -73,7 +78,45 @@ function generateObjectId(titleDe, objects) {
   while (existingIds.includes(`${slug}-${counter}`)) {
     counter++
   }
+
   return `${slug}-${counter}`
+}
+
+function buildObjectFromRequest(req, existingObject = null, forcedId = null) {
+  const shouldRemoveImage = req.body.removeImage === 'true'
+
+  const imageUrl = req.file
+    ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`
+    : shouldRemoveImage
+      ? ''
+      : existingObject?.imageUrl || req.body.imageUrl || ''
+
+  const id = forcedId || req.body.id
+
+  return {
+    id,
+    titleDe: req.body.titleDe,
+    titleFr: req.body.titleFr,
+    shortDe: req.body.shortDe,
+    shortFr: req.body.shortFr || '',
+    technicalDe: req.body.technicalDe || '',
+    technicalFr: req.body.technicalFr || '',
+    imageUrl,
+    imageAltDe: req.body.imageAltDe || '',
+    imageAltFr: req.body.imageAltFr || '',
+    audioUrlDe: req.body.audioUrlDe || '',
+    audioUrlFr: req.body.audioUrlFr || '',
+    audioTranscriptDe: req.body.audioTranscriptDe || '',
+    audioTranscriptFr: req.body.audioTranscriptFr || '',
+    locationHintDe: req.body.locationHintDe || '',
+    locationHintFr: req.body.locationHintFr || '',
+    hotspots: parseJsonField(req.body.hotspots, []),
+    quiz: parseJsonField(req.body.quiz, []),
+  }
+}
+
+function validateObject(object) {
+  return object.id && object.titleDe && object.titleFr && object.shortDe
 }
 
 app.get('/', (req, res) => {
@@ -87,68 +130,25 @@ app.get('/api/objects', (req, res) => {
 app.get('/api/objects/:id', (req, res) => {
   const objects = readObjects()
   const object = objects.find((item) => item.id === req.params.id)
+
   if (!object) {
     return res.status(404).json({ message: 'Objekt nicht gefunden.' })
   }
+
   res.json(object)
 })
 
 app.post('/api/objects', upload.single('image'), (req, res) => {
   const objects = readObjects()
-  const shouldRemoveImage = req.body.removeImage === 'true'
+  const id = generateObjectId(req.body.titleDe || '', objects)
+  const newObject = buildObjectFromRequest(req, null, id)
 
-  const imageUrl = req.file
-    ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`
-    : shouldRemoveImage
-      ? ''
-      : req.body.imageUrl || ''
-
-  // Determine ID: use existing if present, else generate new
-  let id = req.body.id ? String(req.body.id).trim() : ''
-  const isNew = !id
-
-  if (isNew) {
-    if (!req.body.titleDe) {
-      return res.status(400).json({ message: 'Pflichtfelder fehlen.' })
-    }
-    id = generateObjectId(req.body.titleDe, objects)
-  }
-
-  if (!req.body.titleDe || !req.body.titleFr || !req.body.shortDe) {
+  if (!validateObject(newObject)) {
     return res.status(400).json({ message: 'Pflichtfelder fehlen.' })
   }
 
-  // If editing, keep existing imageUrl when no new image uploaded and not removing
-  let finalImageUrl = imageUrl
-  if (!isNew && !req.file && !shouldRemoveImage) {
-    const existing = objects.find((o) => o.id === id)
-    finalImageUrl = existing ? existing.imageUrl : req.body.imageUrl || ''
-  }
-
-  const newObject = {
-    id,
-    titleDe: req.body.titleDe,
-    titleFr: req.body.titleFr,
-    shortDe: req.body.shortDe,
-    shortFr: req.body.shortFr || '',
-    technicalDe: req.body.technicalDe || '',
-    technicalFr: req.body.technicalFr || '',
-    imageUrl: finalImageUrl,
-    imageAltDe: req.body.imageAltDe || '',
-    imageAltFr: req.body.imageAltFr || '',
-    audioUrlDe: req.body.audioUrlDe || '',
-    audioUrlFr: req.body.audioUrlFr || '',
-    audioTranscriptDe: req.body.audioTranscriptDe || '',
-    audioTranscriptFr: req.body.audioTranscriptFr || '',
-    locationHintDe: req.body.locationHintDe || '',
-    locationHintFr: req.body.locationHintFr || '',
-    hotspots: parseJsonField(req.body.hotspots, []),
-    quiz: parseJsonField(req.body.quiz, []),
-  }
-
-  const updatedObjects = objects.filter((item) => item.id !== id)
-  updatedObjects.push(newObject)
-  writeObjects(updatedObjects)
+  objects.push(newObject)
+  writeObjects(objects)
 
   res.status(201).json({
     message: 'Objekt wurde gespeichert.',
@@ -156,14 +156,43 @@ app.post('/api/objects', upload.single('image'), (req, res) => {
   })
 })
 
+app.put('/api/objects/:id', upload.single('image'), (req, res) => {
+  const objects = readObjects()
+  const index = objects.findIndex((item) => item.id === req.params.id)
+
+  if (index === -1) {
+    return res.status(404).json({ message: 'Objekt nicht gefunden.' })
+  }
+
+  const updatedObject = buildObjectFromRequest(req, objects[index], req.params.id)
+
+  if (!validateObject(updatedObject)) {
+    return res.status(400).json({ message: 'Pflichtfelder fehlen.' })
+  }
+
+  objects[index] = updatedObject
+  writeObjects(objects)
+
+  res.json({
+    message: 'Objekt wurde aktualisiert.',
+    object: updatedObject,
+  })
+})
+
 app.delete('/api/objects/:id', (req, res) => {
   const objects = readObjects()
   const updatedObjects = objects.filter((item) => item.id !== req.params.id)
+
   if (objects.length === updatedObjects.length) {
     return res.status(404).json({ message: 'Objekt nicht gefunden.' })
   }
+
   writeObjects(updatedObjects)
-  res.json({ message: 'Objekt wurde gelöscht.', id: req.params.id })
+
+  res.json({
+    message: 'Objekt wurde gelöscht.',
+    id: req.params.id,
+  })
 })
 
 app.listen(port, () => {
