@@ -8,12 +8,30 @@ import styles from './InformationPage.module.scss'
 
 type InfoTab = 'short' | 'technical'
 
+function resolveAssetUrl(url?: string) {
+  if (!url) return ''
+  if (
+    url.startsWith('http') ||
+    url.startsWith('blob:') ||
+    url.startsWith('data:')
+  ) {
+    return url
+  }
+
+  if (url.startsWith('/')) {
+    return `${import.meta.env.BASE_URL}${url.slice(1)}`
+  }
+
+  return `${import.meta.env.BASE_URL}${url}`
+}
+
 function InformationPage() {
   const { objectId } = useParams()
   const [object, setObject] = useState<ObjectData | null>(null)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<InfoTab>('short')
+
   const language = getStoredLanguage()
   const isFr = language === 'FR'
 
@@ -62,23 +80,38 @@ function InformationPage() {
   }
 
   const title = textForLanguage(language, object.titleDe, object.titleFr)
-  const imageAlt = textForLanguage(language, object.imageAltDe || title, object.imageAltFr)
+
+  const imageUrl = resolveAssetUrl(object.imageUrl)
+
+  const imageAlt = textForLanguage(
+    language,
+    object.imageAltDe || title,
+    object.imageAltFr || object.imageAltDe || title
+  )
+
   const shortLabel = isFr ? 'Résumé' : 'Kurz erklärt'
   const technicalLabel = isFr ? 'Technique' : 'Technisch'
-  const shortText = textForLanguage(language, object.shortDe, object.shortFr)
-  const technicalText =
-    textForLanguage(language, object.technicalDe, object.technicalFr) ||
-    (isFr
-      ? 'Aucune description technique n’est encore disponible.'
-      : 'Für dieses Objekt ist noch keine technische Beschreibung vorhanden.')
+
+  const shortText = textForLanguage(
+    language,
+    object.shortDe,
+    object.shortFr || object.shortDe
+  )
+
+  const technicalText = textForLanguage(
+    language,
+    object.technicalDe || object.shortDe,
+    object.technicalFr || object.technicalDe || object.shortFr || object.shortDe
+  )
+
   const activeLabel = activeTab === 'short' ? shortLabel : technicalLabel
   const activeText = activeTab === 'short' ? shortText : technicalText
 
   return (
     <VisitorLayout title="Information">
       <section className={styles.hero} aria-label={title}>
-        {object.imageUrl ? (
-          <img className={styles.heroImage} src={object.imageUrl} alt={imageAlt} />
+        {imageUrl ? (
+          <img className={styles.heroImage} src={imageUrl} alt={imageAlt} />
         ) : (
           <div className={styles.placeholder} role="img" aria-label={imageAlt}>
             {isFr ? 'Image non disponible' : 'Bild nicht verfügbar'}
@@ -87,7 +120,11 @@ function InformationPage() {
       </section>
 
       <section className={styles.body}>
-        <div className={styles.tabs} role="tablist" aria-label={isFr ? 'Type d’information' : 'Informationstiefe'}>
+        <div
+          className={styles.tabs}
+          role="tablist"
+          aria-label={isFr ? 'Type d’information' : 'Informationstiefe'}
+        >
           <button
             type="button"
             className={styles.tab}
@@ -111,7 +148,12 @@ function InformationPage() {
 
         <article className={styles.card} role="tabpanel">
           <h2 className={styles.cardTitle}>{activeLabel}</h2>
-          <p className={styles.text}>{activeText}</p>
+          <p className={styles.text}>
+            {activeText ||
+              (isFr
+                ? 'Aucune information disponible.'
+                : 'Keine Information vorhanden.')}
+          </p>
         </article>
 
         <Link className={styles.quizButton} to={`/object/${object.id}/quiz`}>
