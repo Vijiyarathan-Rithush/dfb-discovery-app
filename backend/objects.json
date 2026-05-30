@@ -3,84 +3,425 @@
     "id": "hg34",
     "titleDe": "Dampflokomotive HG 3/4",
     "titleFr": "Locomotive à vapeur HG 3/4",
-    "shortDe": "Historische Dampflokomotive der Furka-Bergstrecke.",
-    "shortFr": "Locomotive à vapeur historique de la ligne sommitale de la Furka.",
-    "technicalDe": "",
-    "technicalFr": "",
-    "imageUrl": "http://localhost:3001/uploads/1780133669195-screenshot-2026-05-29-225720.png",
-    "imageAltDe": "",
-    "imageAltFr": "",
+    "shortDe": "Die HG 3/4 ist eine historische Dampflokomotive der Furka-Bergstrecke. Sie wurde für steile Bergstrecken gebaut und konnte sowohl auf normalen Schienen als auch mit Zahnradantrieb fahren.",
+    "shortFr": "La HG 3/4 est une locomotive à vapeur historique de la ligne sommitale de la Furka. Elle a été construite pour les fortes pentes et pouvait circuler sur rail normal ainsi qu’avec une crémaillère.",
+    "technicalDe": "Die Lokomotive nutzt Dampfdruck, um Kolben zu bewegen. Die Kraft wird über Treibstangen auf die Räder übertragen. Auf steilen Abschnitten greift zusätzlich ein Zahnrad in die Zahnstange zwischen den Schienen.",
+    "technicalFr": "La locomotive utilise la pression de la vapeur pour déplacer des pistons. La force est transmise aux roues par des bielles. Sur les sections raides, une roue dentée s’engrène dans la crémaillère située entre les rails.",
+    "imageUrl": "http://localhost:3001/uploads/hg34.png",
+    "imageAltDe": "Historische schwarze Dampflokomotive HG 3/4 auf der Furka-Bergstrecke.",
+    "imageAltFr": "Locomotive à vapeur noire historique HG 3/4 sur la ligne sommitale de la Furka.",
     "audioUrlDe": "",
     "audioUrlFr": "",
     "audioTranscriptDe": "",
     "audioTranscriptFr": "",
-    "locationHintDe": "",
-    "locationHintFr": "",
+    "locationHintDe": "Beim Lokomotivstand oder im Bereich der historischen Fahrzeuge.",
+    "locationHintFr": "Près de l’emplacement des locomotives ou dans la zone des véhicules historiques.",
     "hotspots": [
       {
-        "id": "hs-1780134345606",
-        "titleDe": "q",
-        "titleFr": "1",
-        "textDe": "1",
-        "textFr": "",
-        "x": 44.31,
-        "y": 53.51
+        "id": "hs-hg34-kessel",
+        "titleDe": "Dampfkessel",
+        "titleFr": "Chaudière à vapeur",
+        "textDe": "Im Dampfkessel wird Wasser erhitzt, bis Dampf entsteht. Dieser Dampf liefert die Energie für die Bewegung der Lokomotive.",
+        "textFr": "Dans la chaudière, l’eau est chauffée jusqu’à produire de la vapeur. Cette vapeur fournit l’énergie nécessaire au mouvement de la locomotive.",
+        "x": 48.5,
+        "y": 35.2
       },
       {
-        "id": "hs-1780134350101",
-        "titleDe": "1",
-        "titleFr": "1",
-        "textDe": "1",
-        "textFr": "1",
-        "x": 94.03,
-        "y": 18.91
+        "id": "hs-hg34-zahnrad",
+        "titleDe": "Zahnradantrieb",
+        "titleFr": "Entraînement à crémaillère",
+        "textDe": "Auf steilen Strecken greift das Zahnrad in die Zahnstange. Dadurch erhält die Lokomotive mehr Halt und kann sicher bergauf und bergab fahren.",
+        "textFr": "Sur les fortes pentes, la roue dentée s’engrène dans la crémaillère. Cela donne plus d’adhérence à la locomotive pour monter et descendre en sécurité.",
+        "x": 61.3,
+        "y": 72.8
       },
       {
-        "id": "hs-1780134350987",
-        "titleDe": "1",
-        "titleFr": "1",
-        "textDe": "1",
-        "textFr": "1",
-        "x": 4.03,
-        "y": 67.05
+        "id": "hs-hg34-fuehrerstand",
+        "titleDe": "Führerstand",
+        "titleFr": "Cabine de conduite",
+        "textDe": "Im Führerstand bedienen Lokführer und Heizer die Lokomotive. Dort werden Feuer, Dampf, Bremsen und Geschwindigkeit überwacht.",
+        "textFr": "Dans la cabine, le mécanicien et le chauffeur commandent la locomotive. Ils surveillent le feu, la vapeur, les freins et la vitesse.",
+        "x": 78.4,
+        "y": 31.7
       }
     ],
     "quiz": [
       {
-        "id": "q-1780133655764",
-        "questionDe": "Te dua",
-        "questionFr": "1",
+        "id": "q-hg34-1",
+        "questionDe": "Wofür braucht die HG 3/4 den Zahnradantrieb?",
+        "questionFr": "Pourquoi la HG 3/4 utilise-t-elle un entraînement à crémaillère ?",
         "answersDe": [
-          "lov u",
-          "asa",
-          "dsads"
+          "Für steile Bergstrecken",
+          "Für höhere Geschwindigkeit auf geraden Strecken",
+          "Für die Beleuchtung der Lokomotive"
         ],
         "answersFr": [
-          "asdasd",
-          "",
-          ""
+          "Pour les fortes pentes",
+          "Pour aller plus vite sur les lignes droites",
+          "Pour l’éclairage de la locomotive"
         ],
         "correctAnswerIndex": 0,
-        "explanationDe": "asdasd",
-        "explanationFr": ""
+        "explanationDe": "Der Zahnradantrieb sorgt auf steilen Abschnitten für zusätzlichen Halt.",
+        "explanationFr": "L’entraînement à crémaillère offre une meilleure adhérence sur les fortes pentes."
       },
       {
-        "id": "q-1780135217074",
-        "questionDe": "qwe",
-        "questionFr": "qwe",
+        "id": "q-hg34-2",
+        "questionDe": "Welche Energie treibt die Dampflokomotive an?",
+        "questionFr": "Quelle énergie fait avancer la locomotive à vapeur ?",
         "answersDe": [
-          "qwe",
-          "qweq",
-          "qwe"
+          "Dampfdruck",
+          "Solarstrom",
+          "Batterien"
         ],
         "answersFr": [
-          "we",
-          "qwe",
-          "qwe"
+          "La pression de la vapeur",
+          "L’énergie solaire",
+          "Des batteries"
         ],
         "correctAnswerIndex": 0,
-        "explanationDe": "qwe",
-        "explanationFr": "qwe"
+        "explanationDe": "Der Dampfdruck bewegt die Kolben und erzeugt dadurch die Antriebskraft.",
+        "explanationFr": "La pression de la vapeur déplace les pistons et produit la force motrice."
+      }
+    ]
+  },
+  {
+    "id": "zahnradstange",
+    "titleDe": "Zahnstange der Bergstrecke",
+    "titleFr": "Crémaillère de la ligne de montagne",
+    "shortDe": "Die Zahnstange liegt zwischen den Schienen und hilft den Zügen, starke Steigungen sicher zu bewältigen.",
+    "shortFr": "La crémaillère se trouve entre les rails et aide les trains à franchir les fortes pentes en sécurité.",
+    "technicalDe": "Bei einer Zahnradbahn greift ein Zahnrad der Lokomotive in die fest montierte Zahnstange. Dadurch entsteht eine formschlüssige Verbindung, die mehr Sicherheit auf steilen Strecken bietet.",
+    "technicalFr": "Dans un chemin de fer à crémaillère, une roue dentée de la locomotive s’engrène dans une crémaillère fixe. Cette liaison mécanique améliore la sécurité sur les fortes pentes.",
+    "imageUrl": "http://localhost:3001/uploads/zahnradstange.png",
+    "imageAltDe": "Zahnstange zwischen zwei Schienen einer Bergbahnstrecke.",
+    "imageAltFr": "Crémaillère placée entre deux rails d’une ligne de montagne.",
+    "audioUrlDe": "",
+    "audioUrlFr": "",
+    "audioTranscriptDe": "",
+    "audioTranscriptFr": "",
+    "locationHintDe": "Bei einem Gleisabschnitt mit sichtbarer Zahnstange.",
+    "locationHintFr": "Près d’un tronçon de voie avec crémaillère visible.",
+    "hotspots": [
+      {
+        "id": "hs-zs-mitte",
+        "titleDe": "Zahnstange",
+        "titleFr": "Crémaillère",
+        "textDe": "Die Zahnstange ist fest im Gleis montiert. Sie verhindert, dass die Lokomotive auf steilen Abschnitten durchdreht oder rutscht.",
+        "textFr": "La crémaillère est fixée dans la voie. Elle empêche la locomotive de patiner ou de glisser sur les fortes pentes.",
+        "x": 50.1,
+        "y": 52.4
+      },
+      {
+        "id": "hs-zs-schiene",
+        "titleDe": "Fahrschiene",
+        "titleFr": "Rail de roulement",
+        "textDe": "Die normalen Schienen tragen das Gewicht des Zuges und führen die Räder.",
+        "textFr": "Les rails normaux portent le poids du train et guident les roues.",
+        "x": 25.7,
+        "y": 68.1
+      },
+      {
+        "id": "hs-zs-schwelle",
+        "titleDe": "Schwelle",
+        "titleFr": "Traverse",
+        "textDe": "Die Schwellen halten die Schienen und die Zahnstange in der richtigen Position.",
+        "textFr": "Les traverses maintiennent les rails et la crémaillère dans la bonne position.",
+        "x": 67.9,
+        "y": 79.3
+      }
+    ],
+    "quiz": [
+      {
+        "id": "q-zs-1",
+        "questionDe": "Wo befindet sich die Zahnstange?",
+        "questionFr": "Où se trouve la crémaillère ?",
+        "answersDe": [
+          "Zwischen den Schienen",
+          "Auf dem Dach des Zuges",
+          "Im Führerstand"
+        ],
+        "answersFr": [
+          "Entre les rails",
+          "Sur le toit du train",
+          "Dans la cabine de conduite"
+        ],
+        "correctAnswerIndex": 0,
+        "explanationDe": "Die Zahnstange liegt in der Mitte des Gleises zwischen den beiden Fahrschienen.",
+        "explanationFr": "La crémaillère se trouve au milieu de la voie, entre les deux rails."
+      },
+      {
+        "id": "q-zs-2",
+        "questionDe": "Warum ist die Zahnstange auf Bergstrecken wichtig?",
+        "questionFr": "Pourquoi la crémaillère est-elle importante sur les lignes de montagne ?",
+        "answersDe": [
+          "Sie gibt zusätzlichen Halt auf steilen Abschnitten",
+          "Sie macht den Zug leiser",
+          "Sie ersetzt die Bremsen vollständig"
+        ],
+        "answersFr": [
+          "Elle donne une meilleure adhérence sur les fortes pentes",
+          "Elle rend le train plus silencieux",
+          "Elle remplace complètement les freins"
+        ],
+        "correctAnswerIndex": 0,
+        "explanationDe": "Durch den Eingriff des Zahnrads in die Zahnstange kann der Zug sicherer fahren.",
+        "explanationFr": "Grâce à l’engrènement de la roue dentée dans la crémaillère, le train circule plus sûrement."
+      }
+    ]
+  },
+  {
+    "id": "dampfzylinder",
+    "titleDe": "Dampfzylinder",
+    "titleFr": "Cylindre à vapeur",
+    "shortDe": "Der Dampfzylinder wandelt Dampfdruck in Bewegung um. Er ist ein zentrales Bauteil einer Dampflokomotive.",
+    "shortFr": "Le cylindre à vapeur transforme la pression de la vapeur en mouvement. C’est un élément central d’une locomotive à vapeur.",
+    "technicalDe": "Heisser Dampf strömt in den Zylinder und drückt den Kolben hin und her. Diese lineare Bewegung wird über Stangen in eine Drehbewegung der Räder umgewandelt.",
+    "technicalFr": "La vapeur chaude entre dans le cylindre et pousse le piston d’avant en arrière. Ce mouvement linéaire est transformé en rotation des roues par des bielles.",
+    "imageUrl": "http://localhost:3001/uploads/dampfzylinder.png",
+    "imageAltDe": "Nahaufnahme eines Dampfzylinders mit Kolbenstange an einer historischen Lokomotive.",
+    "imageAltFr": "Gros plan d’un cylindre à vapeur avec tige de piston sur une locomotive historique.",
+    "audioUrlDe": "",
+    "audioUrlFr": "",
+    "audioTranscriptDe": "",
+    "audioTranscriptFr": "",
+    "locationHintDe": "Seitlich an der Lokomotive bei den Treibstangen.",
+    "locationHintFr": "Sur le côté de la locomotive, près des bielles motrices.",
+    "hotspots": [
+      {
+        "id": "hs-dz-zylinder",
+        "titleDe": "Zylindergehäuse",
+        "titleFr": "Corps du cylindre",
+        "textDe": "Im Zylindergehäuse bewegt sich der Kolben. Hier wirkt der Dampfdruck direkt auf die Mechanik.",
+        "textFr": "Le piston se déplace dans le corps du cylindre. C’est ici que la pression de la vapeur agit directement sur la mécanique.",
+        "x": 43.2,
+        "y": 48.9
+      },
+      {
+        "id": "hs-dz-kolbenstange",
+        "titleDe": "Kolbenstange",
+        "titleFr": "Tige de piston",
+        "textDe": "Die Kolbenstange überträgt die Hin-und-her-Bewegung des Kolbens nach aussen.",
+        "textFr": "La tige de piston transmet le mouvement de va-et-vient du piston vers l’extérieur.",
+        "x": 60.6,
+        "y": 53.5
+      },
+      {
+        "id": "hs-dz-treibstange",
+        "titleDe": "Treibstange",
+        "titleFr": "Bielle motrice",
+        "textDe": "Die Treibstange wandelt die Bewegung des Kolbens in die Drehbewegung der Räder um.",
+        "textFr": "La bielle motrice transforme le mouvement du piston en rotation des roues.",
+        "x": 72.4,
+        "y": 64.7
+      }
+    ],
+    "quiz": [
+      {
+        "id": "q-dz-1",
+        "questionDe": "Was macht der Dampfzylinder?",
+        "questionFr": "Quel est le rôle du cylindre à vapeur ?",
+        "answersDe": [
+          "Er wandelt Dampfdruck in Bewegung um",
+          "Er speichert Trinkwasser",
+          "Er beleuchtet den Führerstand"
+        ],
+        "answersFr": [
+          "Il transforme la pression de la vapeur en mouvement",
+          "Il stocke de l’eau potable",
+          "Il éclaire la cabine de conduite"
+        ],
+        "correctAnswerIndex": 0,
+        "explanationDe": "Der Dampf drückt den Kolben im Zylinder und erzeugt so mechanische Bewegung.",
+        "explanationFr": "La vapeur pousse le piston dans le cylindre et crée ainsi un mouvement mécanique."
+      },
+      {
+        "id": "q-dz-2",
+        "questionDe": "Welche Bewegung entsteht zuerst im Zylinder?",
+        "questionFr": "Quel mouvement apparaît d’abord dans le cylindre ?",
+        "answersDe": [
+          "Eine Hin-und-her-Bewegung",
+          "Eine Kreisbewegung",
+          "Eine Aufwärtsbewegung des ganzen Zuges"
+        ],
+        "answersFr": [
+          "Un mouvement de va-et-vient",
+          "Un mouvement circulaire",
+          "Un mouvement vertical de tout le train"
+        ],
+        "correctAnswerIndex": 0,
+        "explanationDe": "Der Kolben bewegt sich zuerst linear hin und her. Danach wird diese Bewegung in eine Drehbewegung übertragen.",
+        "explanationFr": "Le piston se déplace d’abord de manière linéaire. Ensuite, ce mouvement est transformé en rotation."
+      }
+    ]
+  },
+  {
+    "id": "wasserkran",
+    "titleDe": "Wasserkran",
+    "titleFr": "Grue à eau",
+    "shortDe": "Mit dem Wasserkran wird der Wasservorrat einer Dampflokomotive aufgefüllt. Ohne Wasser kann kein Dampf erzeugt werden.",
+    "shortFr": "La grue à eau sert à remplir la réserve d’eau d’une locomotive à vapeur. Sans eau, il n’est pas possible de produire de la vapeur.",
+    "technicalDe": "Der Wasserkran besitzt ein schwenkbares Rohr. Dieses wird über den Wasserkasten der Lokomotive gedreht, damit schnell eine grosse Menge Wasser eingefüllt werden kann.",
+    "technicalFr": "La grue à eau possède un tuyau pivotant. Celui-ci est placé au-dessus du réservoir d’eau de la locomotive afin de remplir rapidement une grande quantité d’eau.",
+    "imageUrl": "http://localhost:3001/uploads/wasserkran.png",
+    "imageAltDe": "Historischer Wasserkran neben einem Gleis zum Befüllen von Dampflokomotiven.",
+    "imageAltFr": "Grue à eau historique à côté d’une voie pour remplir les locomotives à vapeur.",
+    "audioUrlDe": "",
+    "audioUrlFr": "",
+    "audioTranscriptDe": "",
+    "audioTranscriptFr": "",
+    "locationHintDe": "Neben dem Gleis im Bahnhofs- oder Depotbereich.",
+    "locationHintFr": "À côté de la voie, dans la zone de la gare ou du dépôt.",
+    "hotspots": [
+      {
+        "id": "hs-wk-ausleger",
+        "titleDe": "Schwenkrohr",
+        "titleFr": "Tuyau pivotant",
+        "textDe": "Das Schwenkrohr kann zur Lokomotive gedreht werden. So wird das Wasser direkt in den Tank eingefüllt.",
+        "textFr": "Le tuyau pivotant peut être tourné vers la locomotive. L’eau est ainsi versée directement dans le réservoir.",
+        "x": 54.8,
+        "y": 29.4
+      },
+      {
+        "id": "hs-wk-ventil",
+        "titleDe": "Ventil",
+        "titleFr": "Vanne",
+        "textDe": "Mit dem Ventil wird der Wasserfluss geöffnet und geschlossen.",
+        "textFr": "La vanne permet d’ouvrir et de fermer l’arrivée d’eau.",
+        "x": 42.6,
+        "y": 51.2
+      },
+      {
+        "id": "hs-wk-sockel",
+        "titleDe": "Standrohr",
+        "titleFr": "Colonne",
+        "textDe": "Das Standrohr trägt den Wasserkran und verbindet ihn mit der Wasserversorgung.",
+        "textFr": "La colonne porte la grue à eau et la relie à l’alimentation en eau.",
+        "x": 38.1,
+        "y": 76.5
+      }
+    ],
+    "quiz": [
+      {
+        "id": "q-wk-1",
+        "questionDe": "Wofür braucht eine Dampflokomotive Wasser?",
+        "questionFr": "Pourquoi une locomotive à vapeur a-t-elle besoin d’eau ?",
+        "answersDe": [
+          "Zur Erzeugung von Dampf",
+          "Zum Reinigen der Fenster",
+          "Zum Kühlen der Sitzplätze"
+        ],
+        "answersFr": [
+          "Pour produire de la vapeur",
+          "Pour nettoyer les vitres",
+          "Pour refroidir les sièges"
+        ],
+        "correctAnswerIndex": 0,
+        "explanationDe": "Wasser wird im Kessel erhitzt und zu Dampf umgewandelt.",
+        "explanationFr": "L’eau est chauffée dans la chaudière et transformée en vapeur."
+      },
+      {
+        "id": "q-wk-2",
+        "questionDe": "Welcher Teil des Wasserkrans wird zur Lokomotive gedreht?",
+        "questionFr": "Quelle partie de la grue à eau est tournée vers la locomotive ?",
+        "answersDe": [
+          "Das Schwenkrohr",
+          "Die Schiene",
+          "Der Kamin"
+        ],
+        "answersFr": [
+          "Le tuyau pivotant",
+          "Le rail",
+          "La cheminée"
+        ],
+        "correctAnswerIndex": 0,
+        "explanationDe": "Das Schwenkrohr wird über den Wasserkasten der Lokomotive bewegt.",
+        "explanationFr": "Le tuyau pivotant est placé au-dessus du réservoir d’eau de la locomotive."
+      }
+    ]
+  },
+  {
+    "id": "personenwagen",
+    "titleDe": "Historischer Personenwagen",
+    "titleFr": "Voiture voyageurs historique",
+    "shortDe": "Der historische Personenwagen zeigt, wie Reisende früher auf Bergstrecken unterwegs waren. Die Einrichtung ist einfacher als in modernen Zügen.",
+    "shortFr": "La voiture voyageurs historique montre comment les passagers voyageaient autrefois sur les lignes de montagne. L’aménagement est plus simple que dans les trains modernes.",
+    "technicalDe": "Personenwagen mussten stabil gebaut sein und trotzdem möglichst leicht bleiben. Sitzbänke, Fenster, Türen und Bremsausrüstung waren auf den Einsatz im Gebirge abgestimmt.",
+    "technicalFr": "Les voitures voyageurs devaient être solides tout en restant aussi légères que possible. Les bancs, fenêtres, portes et freins étaient adaptés à l’utilisation en montagne.",
+    "imageUrl": "http://localhost:3001/uploads/personenwagen.png",
+    "imageAltDe": "Historischer Personenwagen der Furka-Bergstrecke mit Holzbänken und grossen Fenstern.",
+    "imageAltFr": "Voiture voyageurs historique de la ligne de la Furka avec bancs en bois et grandes fenêtres.",
+    "audioUrlDe": "",
+    "audioUrlFr": "",
+    "audioTranscriptDe": "",
+    "audioTranscriptFr": "",
+    "locationHintDe": "Beim Bereich der historischen Wagen.",
+    "locationHintFr": "Dans la zone des voitures historiques.",
+    "hotspots": [
+      {
+        "id": "hs-pw-sitzbank",
+        "titleDe": "Holzbank",
+        "titleFr": "Banc en bois",
+        "textDe": "Die Sitzbänke waren einfach und robust. Komfort war weniger wichtig als Haltbarkeit und Platznutzung.",
+        "textFr": "Les bancs étaient simples et robustes. Le confort était moins important que la durabilité et l’utilisation de l’espace.",
+        "x": 43.9,
+        "y": 66.2
+      },
+      {
+        "id": "hs-pw-fenster",
+        "titleDe": "Fenster",
+        "titleFr": "Fenêtre",
+        "textDe": "Die grossen Fenster ermöglichten den Reisenden einen guten Blick auf die Berglandschaft.",
+        "textFr": "Les grandes fenêtres permettaient aux passagers de bien observer le paysage de montagne.",
+        "x": 51.7,
+        "y": 34.8
+      },
+      {
+        "id": "hs-pw-tuer",
+        "titleDe": "Einstiegstür",
+        "titleFr": "Porte d’accès",
+        "textDe": "Über die Einstiegstür gelangten die Reisenden in den Wagen. Die Türen mussten auch bei Kälte und Schnee zuverlässig funktionieren.",
+        "textFr": "Les passagers entraient dans la voiture par cette porte. Les portes devaient fonctionner de manière fiable même par temps froid et neigeux.",
+        "x": 82.2,
+        "y": 48.6
+      }
+    ],
+    "quiz": [
+      {
+        "id": "q-pw-1",
+        "questionDe": "Was zeigt der historische Personenwagen besonders gut?",
+        "questionFr": "Que montre particulièrement bien la voiture voyageurs historique ?",
+        "answersDe": [
+          "Wie Reisen früher auf Bergstrecken aussah",
+          "Wie moderne Hochgeschwindigkeitszüge funktionieren",
+          "Wie ein Zahnrad hergestellt wird"
+        ],
+        "answersFr": [
+          "Comment on voyageait autrefois sur les lignes de montagne",
+          "Comment fonctionnent les trains à grande vitesse modernes",
+          "Comment une roue dentée est fabriquée"
+        ],
+        "correctAnswerIndex": 0,
+        "explanationDe": "Der Wagen macht die frühere Reiseerfahrung für Besucherinnen und Besucher sichtbar.",
+        "explanationFr": "La voiture rend visible l’expérience de voyage d’autrefois pour les visiteurs.",
+        "explanationFr": "La voiture rend visible l’expérience de voyage d’autrefois pour les visiteurs."
+      },
+      {
+        "id": "q-pw-2",
+        "questionDe": "Warum waren die Sitzbänke eher einfach gebaut?",
+        "questionFr": "Pourquoi les bancs étaient-ils plutôt simples ?",
+        "answersDe": [
+          "Sie mussten robust und platzsparend sein",
+          "Sie waren nur Dekoration",
+          "Sie wurden elektrisch beheizt"
+        ],
+        "answersFr": [
+          "Ils devaient être robustes et économiser de l’espace",
+          "Ils servaient seulement de décoration",
+          "Ils étaient chauffés électriquement"
+        ],
+        "correctAnswerIndex": 0,
+        "explanationDe": "Bei historischen Wagen standen Robustheit und einfache Wartung im Vordergrund.",
+        "explanationFr": "Dans les voitures historiques, la robustesse et l’entretien simple étaient prioritaires."
       }
     ]
   }
