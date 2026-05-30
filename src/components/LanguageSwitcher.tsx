@@ -1,11 +1,25 @@
 import { useState } from 'react'
 import styles from './LanguageSwitcher.module.scss'
 
-const LANGUAGES = ['DE', 'FR'] as const
-type Language = (typeof LANGUAGES)[number]
+export const LANGUAGES = ['DE', 'FR'] as const
+export type Language = (typeof LANGUAGES)[number]
 
-function LanguageSwitcher() {
-  const [active, setActive] = useState<Language>('DE')
+interface LanguageSwitcherProps {
+  language?: Language
+  onChange?: (lang: Language) => void
+}
+
+function LanguageSwitcher({ language, onChange }: LanguageSwitcherProps) {
+  const [internalLang, setInternalLang] = useState<Language>('DE')
+  const active = language ?? internalLang
+
+  function handleClick(lang: Language) {
+    if (onChange) {
+      onChange(lang)
+    } else {
+      setInternalLang(lang)
+    }
+  }
 
   return (
     <div className={styles.switcher} role="group" aria-label="Sprache wählen">
@@ -15,7 +29,7 @@ function LanguageSwitcher() {
           type="button"
           className={styles.option}
           aria-pressed={active === lang}
-          onClick={() => setActive(lang)}
+          onClick={() => handleClick(lang)}
         >
           {lang}
         </button>

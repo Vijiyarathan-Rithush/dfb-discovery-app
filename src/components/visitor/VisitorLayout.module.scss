@@ -1,0 +1,54 @@
+.shell {
+  width: min(100%, 402px);
+  min-height: 100svh;
+  margin-inline: auto;
+  background: tokens.$color-background;
+  color: tokens.$color-text;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  align-items: center;
+  min-height: 88px;
+  padding: 0 20px;
+  background: tokens.$color-primary-dark;
+  color: tokens.$color-cream-text;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: tokens.$radius-pill;
+  background: transparent;
+  color: tokens.$color-accent;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  &:focus-visible {
+    outline: 2px solid tokens.$color-accent;
+    outline-offset: 2px;
+  }
+}
+
+.title {
+  margin: 0;
+  color: tokens.$color-cream-text;
+  font-size: 25px;
+  font-weight: tokens.$font-weight-regular;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+}
+
+.content {
+  min-height: calc(100svh - 88px);
+  background: tokens.$color-background;
+}
